@@ -27,7 +27,7 @@ server.all("*", (req, res, next) => {
 
 server.use("/account", require("../router/account.js"));
 server.use("/getSql", require("../router/getsql.js"));//路由路径
-
+server.use("/admin", require("../router/admin.js"));
 server.listen(3000, () => {
   console.log("服务器启动成功！");
 });

@@ -60,7 +60,7 @@
 					<img src="../assets/lun3.png" >
 				</div>
 			</div>
-			<div style="width: 20%;"class="conrig">
+			<div style="width: 20%;" class="conrig">
 				<div>
 					<span class="tead">风凌天下新书震撼发布</span>
 					<div class="p4">
@@ -290,7 +290,7 @@
 <style scoped="scoped">
 	/* @import url("../assets/css/paihang.css"); */
 	@import url("../assets/icon-font/iconfont.css");
-	/deep/ .el-carousel__item--card{
+	 .el-carousel__item--card{
 		left: 64px;
 	}
 	#pai>ul{

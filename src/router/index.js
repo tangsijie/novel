@@ -11,6 +11,7 @@ import selfinfo from '../page/selfinfo.vue'
 import renull from '../page/renull.vue'
 import gohome from '../page/gohome.vue'
 import fenlei from '../page/fenlei.vue'
+import admin from '../page/admin.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -59,6 +60,11 @@ export default new Router({
 		  path:'/fenlei',//页面的一个路径
 		  name:'fenlei',
 		  component:fenlei//申明你现在的这个路径是导向哪一个文件也就是页面的含义
-		}
+		},
+		{
+			path:'/admin',//页面的一个路径
+			name:'admin',
+			component:admin//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+		  }
   ]
 })

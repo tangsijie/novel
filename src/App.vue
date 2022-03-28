@@ -19,4 +19,10 @@ export default {
 	margin: 0;
 	list-style: none;
 }
+body,html{
+  height: 100%;
+}
+#app{
+  height: 100%;
+}
 </style>
