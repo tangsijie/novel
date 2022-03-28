@@ -1,0 +1,16 @@
+{
+  "id": "3281520",
+  "name": "yewan",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "3659216",
+      "name": "夜晚模式",
+      "font_class": "yewanmoshi",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    }
+  ]
+}

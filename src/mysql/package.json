@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "express": "^4.17.3",
+    "jwt-simple": "^0.5.6",
+    "moment": "^2.29.1",
+    "mysql": "^2.18.1"
+  },
+  "dependencies": {
+    "bignumber.js": "^9.0.2"
+  }
+}
