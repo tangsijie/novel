@@ -35,7 +35,7 @@
     <el-table-column
       prop="phone"
       label="手机"
-      width="300">
+      width="150">
     </el-table-column>
     <el-table-column
       prop="shengri"
@@ -50,7 +50,7 @@
     <el-table-column
       prop="jianjie"
       label="简介"
-      width="120">
+      width="220">
     </el-table-column>
     <el-table-column
       fixed="right"
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+	import axios from "axios";
 export default {
     data(){
         // reader:''
@@ -89,16 +90,20 @@ export default {
         handleClick(row) {
         console.log(row);
       },
-      getuser(){
-          this.axios({
+      getreader(){
+          axios({
 		         method: "post",
-	            url: "http://127.0.0.1:3000/account/getreader",
+	            url: "http://127.0.0.1:3000/admin/getreader",
                     }).then(res => {
-                        this.reader = this.res.data.data
+                        this.reader = res.data.data;
+						console.log('reader',this.reader)
                             })
-                 }
+                 },
 
-            }
+            },
+						mounted() {
+							this.getreader()
+						}
 }
 </script>
 
