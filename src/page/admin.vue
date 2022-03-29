@@ -3,8 +3,8 @@
       <el-container style="height:100%">
       <el-aside width="250px" height="100%" style="background:#274b77">
           <div style="background:rgb(26, 51, 82)">读者管理</div>
-          <div>作者管理</div>
-          <div>管理员管理</div>
+          <div @click="goauthorAdmin">作者管理</div>
+          <div @click="gosuperadmin">管理员管理</div>
       </el-aside>
       <el-main>
           <el-table
@@ -57,8 +57,7 @@
       label="操作"
       width="100">
       <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-        <el-button type="text" size="small">编辑</el-button>
+        <el-button type="text" @click="handleClick(scope.row)"  size="small">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -87,19 +86,38 @@ export default {
        
     },
     methods:{
-        handleClick(row) {
-        console.log(row);
-      },
       getreader(){
           axios({
 		         method: "post",
 	            url: "http://127.0.0.1:3000/admin/getreader",
                     }).then(res => {
                         this.reader = res.data.data;
-						console.log('reader',this.reader)
                             })
                  },
+          gosuperadmin(){
+              this.$router.push({
+                path:'/superadmin'
+              })
+          },
 
+          handleClick(e){
+               axios({
+		               method: "post",
+	                  url: "http://127.0.0.1:3000/admin/deletereader",
+                    data:{
+                      readerid:e.readerid
+                    }
+                  })
+                  .then(res => {
+                    alert("删除成功")
+                      this.getreader
+                            })
+                  },
+                  goauthorAdmin(){
+                    this.$router.push({
+                      path:'/authorAdmin'
+                    })
+                  }
             },
 						mounted() {
 							this.getreader()
