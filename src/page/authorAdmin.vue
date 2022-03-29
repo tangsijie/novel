@@ -188,6 +188,7 @@ export default {
       //获取到作者的id或者名字，从作品表中找到该作者的作品
       checkwork(e){
           this.dialogVisible = true
+		  console.log(e.wname)
           axios({
 		         method: "post",
 	            url: "http://127.0.0.1:3000/admin/getauthorwork",
@@ -205,7 +206,7 @@ export default {
 		         method: "post",
 	            url: "http://127.0.0.1:3000/admin/deleteauthor",
                 data:{
-                    id:row.id
+                    id:row.writerid
                 }
                     }).then(res => {
                          alert("删除成功")
@@ -221,8 +222,8 @@ export default {
                 }
                     }).then(res => {
                         alert("删除成功")
-                            this.checkwork()
-                            })
+                           this.dialogVisible = false
+                        })
       }
     },
     mounted(){

@@ -41,7 +41,7 @@ async getreader(request, response, next) {
     }
   }
   async deletereader(request, response, next) {
-    let getSql = " DELETE * FROM reader WHERE readerid = ?; ";
+    let getSql = "DELETE FROM reader WHERE readerid = ?;";
     let params = [request.body.readerid];
     try {
       let result = await db.exec(getSql, params);
@@ -156,7 +156,7 @@ async getreader(request, response, next) {
 
    //删除作者
    async deleteauthor(request, response, next) {
-    let getSql = " DELETE * FROM writer WHERE id = ?; ";
+    let getSql = " DELETE FROM writer WHERE writerid = ?; ";
     let params = [request.body.id];
     try {
       let result = await db.exec(getSql, params);
@@ -193,7 +193,7 @@ async getreader(request, response, next) {
   }
   //删除书籍
   async deletebook(request, response, next) {
-    let getSql = " DELETE * FROM book WHERE id = ?; ";
+    let getSql = " DELETE FROM book WHERE id = ?; ";
     let params = [request.body.id];
     try {
       let result = await db.exec(getSql, params);
@@ -269,7 +269,7 @@ async getreader(request, response, next) {
   }
   //删除管理员
   async deleteadmin(request, response, next) {
-    let getSql = " DELETE * FROM admin WHERE id = ?; ";
+    let getSql = " DELETE FROM admin WHERE adminid = ?; ";
     let params = [request.body.id];
     try {
       let result = await db.exec(getSql, params);

@@ -38,7 +38,7 @@
 		<div class="contain1">
 			<div style="width: 20%;">
 				<ul class="fenlei-contain">
-					<li v-for="(item,index) in fenlei.slice(0,14) " :key="index" @click="gozifenlei(item)">
+					<li v-for="(item,index) in fenlei.slice(0,14) " :key="index" @click="gofufenlei(item)">
 						<i class="el-icon-reading"></i>
 						<p>{{item.fufenlei}}</p>
 						<p>{{mesg[index].fangwenliang}}</p>
@@ -153,7 +153,7 @@
 	 export default{
 		  data() {
 		        return {
-					zifenlei:'',
+					fufenlei:'',
 					fenlei:'',
 					mesg:'',
 					LoginUser:'',
@@ -175,22 +175,22 @@
 						}
 					});
 				  },
-				  gozifenlei(f){
-					  
+				  gofufenlei(f){
+					  console.log('f',f.fufenlei)
 					  //获取子分类
 					        axios({
 					          method: "post",
-					          url: "http://127.0.0.1:3000/getSql/zifenleiSql",
+					          url: "http://127.0.0.1:3000/getSql/getfufenleiSql",
 					          data: {
-								fufenlei:f.fufenlei
+								fufenlei:f.fufenlei,
 					          }
 					        }).then(
 					          res => {
-					  		this.zifenlei = res.data.data;
+					  		this.fufenleimesg = res.data.data;
 							this.$router.push({
 												name:"fenlei",
 												params:{
-													passfenlei:this.zifenlei,
+													passfenlei:this.fufenleimesg,
 												},
 											});
 					          },

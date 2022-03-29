@@ -101,6 +101,7 @@ export default {
           },
 
           handleClick(e){
+						console.log(1)
                axios({
 		               method: "post",
 	                  url: "http://127.0.0.1:3000/admin/deletereader",
@@ -110,7 +111,7 @@ export default {
                   })
                   .then(res => {
                     alert("删除成功")
-                      this.getreader
+                      this.getreader()
                             })
                   },
                   goauthorAdmin(){

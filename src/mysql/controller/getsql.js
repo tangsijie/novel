@@ -9,7 +9,6 @@ class AccountCountroller {
 	    try {
 	      let result = await db.exec(updatemimaSql, params);
 	      if (result && result.affectedRows >= 1) {
-	        // console.log("访问服务器成功！"),
 	          response.json({
 	            code: 200,
 	            msg: "更新成功",
@@ -49,7 +48,6 @@ class AccountCountroller {
 	    try {
 	      let result = await db.exec(updateSql, params);
 	      if (result && result.affectedRows >= 1) {
-	        // console.log("访问服务器成功！"),
 	          response.json({
 	            code: 200,
 	            msg: "更新成功",
@@ -86,12 +84,9 @@ class AccountCountroller {
 	  async isaddtuijianSql(request, response, next) {
 	      let isaddtuijianSql = " SELECT * FROM tuijian where username=? and bookname=?; ";
 	      let params = [request.body.username,request.body.bookname];
-				console.log('pa',isaddtuijianSql);
 	      try {
 	        let result = await db.exec(isaddtuijianSql, params);
-	  			console.log('re',result);
 	        if (result && result.length >= 1) {
-	          // console.log("访问服务器成功！"),
 	            response.json({
 	              code: 200,
 	              msg: "可以推荐",
@@ -131,7 +126,6 @@ class AccountCountroller {
 	      try {
 	        let result = await db.exec(addtuijianSql, params);
 	        if (result && result.affectedRows >= 1) {
-	          // console.log("访问服务器成功！"),
 	            response.json({
 	              code: 200,
 	              msg: "推荐成功",
@@ -171,7 +165,6 @@ class AccountCountroller {
 			    try {
 			      let result = await db.exec(updatetuijianSql, params);
 			      if (result && result.affectedRows >= 1) {
-			        // console.log("访问服务器成功！"),
 			          response.json({
 			            code: 200,
 			            msg: "更新推荐成功",
@@ -210,9 +203,7 @@ class AccountCountroller {
 			      let params = [request.body.bookname];
 			      try {
 			        let result = await db.exec(tuijianshowSql, params);
-			  			console.log('re',result);
 			        if (result && result.length >= 1) {
-			          // console.log("访问服务器成功！"),
 			            response.json({
 			              code: 200,
 			              msg: "展示推荐",
@@ -251,9 +242,7 @@ class AccountCountroller {
 		    let params = [request.body.username,request.body.bookname];
 		    try {
 		      let result = await db.exec(isaddshujiaSql, params);
-					// console.log('re',result);
 		      if (result && result.length >= 1) {
-		        // console.log("访问服务器成功！"),
 		          response.json({
 		            code: 200,
 		            msg: "查询成功",
@@ -293,7 +282,6 @@ class AccountCountroller {
 	      try {
 	        let result = await db.exec(addshujiaSql, params);
 	        if (result && result.affectedRows >= 1) {
-	          // console.log("访问服务器成功！"),
 	            response.json({
 	              code: 200,
 	              msg: "加入书架成功",
@@ -330,12 +318,9 @@ class AccountCountroller {
 	  async delshujiaSql(request, response, next) {
 	      let delshujiaSql = " Delete from shujia where id=?;";
 	      let params = [request.body.id];
-	  				// console.log('shujia',params);
-	  				// console.log('ff',delshujiaSql);
 	      try {
 	        let result = await db.exec(delshujiaSql, params);
 	        if (result && result.length >= 1) {
-	          // console.log("访问服务器成功！"),
 	            response.json({
 	              code: 200,
 	              msg: "删除成功",
@@ -373,13 +358,9 @@ class AccountCountroller {
 	  async shujiaSql(request, response, next) {
 	      let shujiaSql = " SELECT * FROM shujia where username=?; ";
 	      let params = [request.body.username];
-				// console.log('shujia',params);
-				// console.log('ff',shujiaSql);
 	      try {
 	        let result = await db.exec(shujiaSql, params);
-					// console.log('re',result);
 	        if (result && result.length >= 1) {
-	          // console.log("访问服务器成功！"),
 	            response.json({
 	              code: 200,
 	              msg: "查询成功",
@@ -419,7 +400,6 @@ class AccountCountroller {
 	    try {
 	      let result = await db.exec(getSql, params);
 	      if (result && result.length >= 1) {
-	        // console.log("访问服务器成功！"),
 	          response.json({
 	            code: 200,
 	            msg: "查询成功",
@@ -452,14 +432,14 @@ class AccountCountroller {
 	      );
 	    }
 	  }
-		//传输后端数据到前端,zifenlei的各种信息
-		async zifenleiSql(request, response, next) {
-		    let zifenleiSql = " SELECT * FROM book where fufenlei=?; ";
+		//传输后端数据到前端,fufenlei的各种信息
+		async getfufenleiSql(request, response, next) {
+			
+		    let fufenleiSql = " SELECT * FROM book where fufenlei= ?; ";
 		    let params = [request.body.fufenlei];
 		    try {
-		      let result = await db.exec(zifenleiSql, params);
+		      let result = await db.exec(fufenleiSql, params);
 		      if (result && result.length >= 1) {
-		        // console.log("访问服务器成功！"),
 		          response.json({
 		            code: 200,
 		            msg: "查询成功",
@@ -492,6 +472,86 @@ class AccountCountroller {
 		      );
 		    }
 		  }
+			//传输后端数据到前端,zifenlei的各种信息
+			async zifenleiSql(request, response, next) {
+			    let zifenleiSql = " SELECT  * FROM book where zifenlei=?; ";
+			    let params = [request.body.zifenlei];
+					console.log('body',zifenleiSql)
+			    try {
+			      let result = await db.exec(zifenleiSql, params);
+			      if (result && result.length >= 1) {
+			          response.json({
+			            code: 200,
+			            msg: "查询成功",
+			            data: result,
+			            token: "createToken(result)"
+			          });
+			      } else {
+			        response.json({
+						
+			          code: 200,
+			          msg: "登录失败",
+			          data: result
+			        });
+			      }
+			    } catch (error) {
+			      //TODO handle the exception
+			      response.json({
+			        code: 200,
+			        msg: "服务器异常",
+			        error
+			      });
+			    }
+			    function createToken(data) {
+			      return jwt.encode(
+			        {
+			          exp: Date.now() + 1000 * 60 * 60 * 24,
+			          info: data
+			        },
+			        require("../config").tokenKey
+			      );
+			    }
+			  }
+				//传输后端数据到前端,去重zifenlei的各种信息
+				async unizifenleiSql(request, response, next) {
+				    let onlyzifenleiSql = " SELECT distinct zifenlei FROM book where fufenlei=?;";
+				    let params = [request.body.fufenlei];
+						console.log('body',onlyzifenleiSql)
+				    try {
+				      let result = await db.exec(onlyzifenleiSql, params);
+				      if (result && result.length >= 1) {
+				          response.json({
+				            code: 200,
+				            msg: "查询成功",
+				            data: result,
+				            token: "createToken(result)"
+				          });
+				      } else {
+				        response.json({
+							
+				          code: 200,
+				          msg: "登录失败",
+				          data: result
+				        });
+				      }
+				    } catch (error) {
+				      //TODO handle the exception
+				      response.json({
+				        code: 200,
+				        msg: "服务器异常",
+				        error
+				      });
+				    }
+				    function createToken(data) {
+				      return jwt.encode(
+				        {
+				          exp: Date.now() + 1000 * 60 * 60 * 24,
+				          info: data
+				        },
+				        require("../config").tokenKey
+				      );
+				    }
+				  }
 	  //章节
 		async zhangjieSql(request, response, next) {
 		    let getSql = " SELECT * FROM zhangjie where bookname=?; ";
@@ -499,7 +559,6 @@ class AccountCountroller {
 		    try {
 		      let result = await db.exec(getSql, params);
 		      if (result && result.length >= 1) {
-		        // console.log("访问服务器成功！"),
 		          response.json({
 		            code: 200,
 		            msg: "查询成功",
@@ -539,7 +598,6 @@ class AccountCountroller {
 	     try {
 	       let result = await db.exec(getSql, params);
 	       if (result && result.length >= 1) {
-	         // console.log("访问服务器成功！"),
 	           response.json({
 	             code: 200,
 	             msg: "查询成功",

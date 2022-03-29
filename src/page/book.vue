@@ -18,9 +18,9 @@
 	</div>
 		<el-breadcrumb separator-class="el-icon-arrow-right">
 		  <el-breadcrumb-item class="myColor" :to="{ name:'home' }" >首页</el-breadcrumb-item>
-		  <el-breadcrumb-item class="myColor">活动管理</el-breadcrumb-item>
-		  <el-breadcrumb-item class="myColor">活动列表</el-breadcrumb-item>
-		  <el-breadcrumb-item class="myColor">活动详情</el-breadcrumb-item>
+		  <el-breadcrumb-item class="myColor" ><span >{{getBook.fufenlei}}</span></el-breadcrumb-item>
+		  <el-breadcrumb-item class="myColor" ><span >{{getBook.zifenlei}}</span></el-breadcrumb-item>
+		  <el-breadcrumb-item class="myColor">{{getBook.bookname}}</el-breadcrumb-item>
 		</el-breadcrumb>
 		
 	
@@ -171,10 +171,10 @@
 	export default{
 		data(){
 			return{
-				tuijianshowmesg:'',
-				isaddtuijianmesg:'',
-				isaddshujiamesg:'',
-				getBook:'',
+				tuijianshowmesg:[],
+				isaddtuijianmesg:[],
+				isaddshujiamesg:[],
+				getBook:[],
 				isadd:true,
 				isaddtui:true,
 				box:false,
@@ -183,8 +183,8 @@
 				LoginUser:'',
 				isshow:false,
 				activeName: 'first',
-				zhangjie:'',
-				shujiamesg:'',
+				zhangjie:[],
+				shujiamesg:[],
 			}
 			
 		},
@@ -292,7 +292,6 @@
 			        res => {
 					this.isaddtuijianmesg = res.data.data;
 					this.isaddtuijiancheck();
-					console.log('isaddtuijianmesg',this.isaddtuijianmesg[0].tuijianshu)
 					
 			        },
 			        err => {
@@ -492,7 +491,15 @@
 					}
 				});
 			},
-			
+		// gofenlei(){
+		// 	console.log('gofenlei',this.getBook)
+		// 	this.$router.push({
+		// 		name:'fenlei',
+		// 		params:{
+		// 			passfenlei:this.getBook
+		// 		}
+		// 	});
+		// },	
 			
 			
 			

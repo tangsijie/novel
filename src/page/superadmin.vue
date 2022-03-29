@@ -123,6 +123,7 @@ export default {
                             }
                             }).then(res => {
                                 alert("添加成功")
+								this.dialogVisible = false
                              this.getadmin()
                                  })
                  }
