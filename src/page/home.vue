@@ -290,7 +290,7 @@
 <style scoped="scoped">
 	/* @import url("../assets/css/paihang.css"); */
 	@import url("../assets/icon-font/iconfont.css");
-	/deep/ .el-carousel__item--card{
+	 .el-carousel__item--card{
 		left: 64px;
 	}
 	#pai>ul{
