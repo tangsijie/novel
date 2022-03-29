@@ -14,6 +14,8 @@ import fenlei from '../page/fenlei.vue'
 import admin from '../page/admin.vue'
 import authorAdmin from '../page/authorAdmin.vue'
 import superadmin from '../page/superadmin.vue'
+import writebook from '../page/writebook.vue'
+import authoraddbook from '../page/authoraddbook.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -77,6 +79,16 @@ export default new Router({
 			path:'/superadmin',//页面的一个路径
 			name:'superadmin',
 			component:superadmin//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+		},
+		{
+			path:'/writebook',//页面的一个路径
+			name:'writebook',
+			component:writebook//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+		},
+		{
+			path:'/authoraddbook',//页面的一个路径
+			name:'authoraddbook',
+			component:authoraddbook//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		}
 		
   ]
