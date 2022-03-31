@@ -10,8 +10,11 @@
 				<p class="logo2">凤凰小说</p>
 			</div>
 				<div class="nav-mid">
-					<input class="search" type="text" placeholder="斗破苍穹">
-					<el-button type="primary" icon="el-icon-search">搜索</el-button>
+					<input class="search" type="text" v-model="searchvalue" placeholder="斗破苍穹" >
+					<div class="search2" v-if="searchshow">
+						<p v-for="(item,index) in searchmesg" :key="index" @click="gobook(item)">{{item.bookname}}</p>
+					</div>
+					<el-button type="primary" icon="el-icon-search" @click="searchclick">搜索</el-button>
 				</div>
 				<div class="mybook-contain">
 					<div class="mybook" @click="gomybook">我的书</div>
@@ -110,7 +113,7 @@
 					</div>
 				</div>
 				<ul>
-					<li v-for="(item,index) in mesg.slice(0,6)" :key="index">
+					<li v-for="(item,index) in mesg.slice(0,6)" :key="index" @click="gobook(item)">
 						<div>{{item.bookname}}</div>
 						<div> <p>41422</p><p>人在追</p></div>
 						<p>{{item.jieshao}}</p>
@@ -118,7 +121,7 @@
 				</ul>
 				<hr style="position: relative;top: 30px;">
 				<div class="conts-fre">
-					<div v-for="(item,index) in mesg.slice(0,2)" :key="index">
+					<div v-for="(item,index) in mesg.slice(0,2)" :key="index" @click="gobook(item)">
 							<p>{{item.bookname}}<p>
 							<p>{{item.jieshao}}</p>
 						<img src="../assets/img/1.jpg" >
@@ -153,6 +156,9 @@
 	 export default{
 		  data() {
 		        return {
+					searchshow:false,
+					searchmesg:[],
+					searchvalue:'',
 					fufenlei:'',
 					fenlei:'',
 					mesg:'',
@@ -199,6 +205,24 @@
 					          }
 					        );
 				  	
+				  },
+				  //搜索功能
+				  searchclick(){
+					  axios({
+					          method: "post",
+					          url: "http://127.0.0.1:3000/getSql/searchSql",
+					          data:{
+					           inputvalue:this.searchvalue
+					          }
+					        }).then(
+					          res => {
+					  		this.searchmesg = res.data.data;
+							this.searchshow=true;
+					          },
+					          err => {
+					            console.log(err.msg);
+					          }
+					        );
 				  },
 				  gologin(){//你给事件所定义的事件名
 				  	this.$router.push({//this就是调用这个文件里面的方法和数据,$router的意思就是调用路由，使得路由进行跳转
@@ -377,6 +401,19 @@
 		    width: 326px;
 		    height: 38px;
 		    padding: 0 11px;
+	}
+	.search2{
+		    font: 14px/38px PingFangSC-Regular,'-apple-system',Simsun;
+		    width: 326px;
+		    height: 200px;
+		    padding: 0 11px;
+			position: absolute;
+			z-index: 99;
+			background-color: white;
+			overflow: auto;
+	}
+	.search2>p:hover{
+		background-color: rgba(18,18,18,.1);;
 	}
 	.nav1{
 		-webkit-box-shadow: 0 1px 3px rgba(18,18,18,.1);

@@ -23,8 +23,8 @@
 					  </div>
 				  </div>
 				  <div class="main2mid">
-					  <div class="booklist">
-						  <div class="books" v-for="(item,index) in zifenleimesg" :key="index">
+					  <div class="booklist" >
+						  <div class="books" v-for="(item,index) in zifenleimesg" :key="index" @click="godetail(item)">
 							  <div class="box-shadow"></div>
 							  <div class="box-img"><img src="../../static/img/150.jpg" ></div>
 							  <h2>{{item.bookname}}</h2>
@@ -84,6 +84,7 @@
 				unizifenleimesg:[],
 				fenleimesg:[],
 				zifenleimesg:[],
+				zhangjie:[],
 			};
 		},
 		methods:{
@@ -142,7 +143,30 @@
 				        }
 				      );
 				    },
-			
+			godetail(b){
+				axios({
+				        method: "post",
+				        url: "http://127.0.0.1:3000/getSql/zhangjieSql",
+				        data: {
+							bookname:b.bookname
+				        }
+				      }).then(
+				        res => {
+				//           console.log(res.data);
+							this.zhangjie = res.data.data;
+							this.$router.push({
+								name:'detail',
+								params:{
+									detailmesg:b,
+									zhangjiemesg:this.zhangjie,
+								}
+							});
+				        },
+				        err => {
+				          console.log(err.msg);
+				        }
+				      );
+			}
 		},
 		components:{
 			fenleihead,

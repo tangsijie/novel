@@ -55,12 +55,13 @@
 				<h6>©版权所有 侵权必究</h6>
 			</div>
 			<div class="contianer-last">
-				<div class="contianer-last1">
+				<div class="contianer-last1" >
 					<span>{{zhangjie[this.num-1].zhangjieshu}}   {{zhangjie[this.num-1].title}}</span>
 					<pre>
 					<p>{{zhangjie[this.num-1].value}}</p>
 					</pre>
 				</div>
+				
 			</div>
 		<div class="bottom">
 			<div @click="pre">上一章</div>
@@ -78,6 +79,18 @@
 			  </el-pagination>
 		  </div>
 				<el-backtop></el-backtop>
+		<div class="comment">
+			<input type="text" name="" id="" value="" placeholder="快点来一起评论吧"/>
+			<div class="fabiao">发表</div>
+			<div class="comment-box">
+				<div>
+					<div class="img-box"><img src="../../static/img/touxiang2.jpg" ></div>
+					<p class="com-name">天妒英才</p><p class="com-time">发表于2018-03-20 11:20:39</p>
+					<div class="com-value">的的说法地方大师asfasfsafsf第三方的考试辅导hi返回的我i非得分后卫为哦发窘为凤尾u发傅为对方</div>
+					<div class="com-button">回复</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -96,8 +109,8 @@
 						mululist1Fixed:true,
 						mulu1Fixed:true,
 						num:1,
-						book:'',
-						zhangjie:'',
+						book:[],
+						zhangjie:[],
 						// length:this.zhangjie.length,
 						currentPage3: 1,
 			        };
@@ -559,5 +572,74 @@
 	}
 	.bottom>div:hover{
 		background-color: #aaaa7f;
+	}
+	.comment{
+		width: 50%;
+		background: #f3e9c6;
+		top: 115px;
+		margin: 30px auto 20px;
+	}
+	.fabiao{
+		background-color: #bf2c24;
+		float: right;
+		top: 25px;
+		right: 30px;
+		position: relative;
+		font-size: 14px;
+		    line-height: 29px;
+		    width: 68px;
+		    height: 29px;
+		    text-align: center;
+		    border-radius: 2px;
+	}
+	.comment>input{
+		width: 70%;
+		height: 35px;
+		left: 50%; 
+		position: relative;
+	    margin-left: -40%;
+		margin-top: 20px;
+	}
+	.comment-box{
+		width: 100%;
+		
+	}
+	.comment-box>div{
+		margin: 20px 20px 20px;
+		width: 100%;
+		position: relative;
+		padding-bottom: 20px;
+	}
+	.img-box{
+		width: 50px;
+		height: 50px;
+	}
+	.img-box>img{
+		display: block;
+		width: 100%;
+		height: 100%;
+		border-radius: 100%;
+	}
+	.com-name{
+		position: absolute;
+		top: 10px;
+		left: 60px;
+	}
+	.com-time{
+		top: 10px;
+		right: 30px;
+		position: absolute;
+	}
+	.com-value{
+		margin-left: 30px;
+		margin-top: 20px;
+		width: 70%;
+		max-height: 200px;
+		overflow: auto;
+	}
+	.com-button{
+		margin-left: 80%;
+		width: 40px;
+		margin-top: 10px;
 	}
 </style>

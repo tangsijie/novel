@@ -61,7 +61,7 @@ export default new Router({
 		  component:renull//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
-		  path:'/fenlei',//页面的一个路径
+		  path:'/fenlei/:detailmesg/:zhangjiemesg',//页面的一个路径
 		  name:'fenlei',
 		  component:fenlei//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},

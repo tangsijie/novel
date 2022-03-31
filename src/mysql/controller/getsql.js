@@ -2,6 +2,45 @@ const db = require("../core/mysql.js");
 const moment = require("moment");
 const jwt = require("jwt-simple");
 class AccountCountroller {
+	//搜索功能
+	async searchSql(request, response, next) {
+	    let getsSql = " SELECT * FROM book where bookname like '%"+request.body.inputvalue+"%'; ";
+	    let params = [request.body.inputvalue];
+	    try {
+	      let result = await db.exec(getsSql, params);
+	      if (result && result.length >= 1) {
+	          response.json({
+	            code: 200,
+	            msg: "查询成功",
+	            data: result,
+	            token: "createToken(result)"
+	          });
+	      } else {
+	        response.json({
+				
+	          code: 200,
+	          msg: "登录失败",
+	          data: result
+	        });
+	      }
+	    } catch (error) {
+	      //TODO handle the exception
+	      response.json({
+	        code: 200,
+	        msg: "服务器异常",
+	        error
+	      });
+	    }
+	    function createToken(data) {
+	      return jwt.encode(
+	        {
+	          exp: Date.now() + 1000 * 60 * 60 * 24,
+	          info: data
+	        },
+	        require("../config").tokenKey
+	      );
+	    }
+	  }
 	//修改密码
 	async updatemimaSql(request, response, next) {
 	    let updatemimaSql = " UPDATE reader SET rpwd=? WHERE readerid = ? ; ";

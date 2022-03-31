@@ -70,9 +70,8 @@
 	    },
 	isaccount: "",
 	      ispassword: "",
-	//       count: 0,
+	      count: 0,
 	      alink: "",
-	      isture: false,
 		lcount: 0,
 	      lisaccount: "",
 	      lispassword: "",
@@ -138,17 +137,14 @@
 	    st1() {
 	      //学生
 	      this.count = 1;
-	      this.isture = false;
 	    },
 	    st2() {
 	      //企业
 	      this.count = 2;
-	      this.isture = false;
 	    },
 	    st3() {
 	      //学校
 	      this.count = 3;
-	      this.isture = true;
 	    },
 	    //注册
 	    login() {
@@ -168,14 +164,27 @@
 	        }).then(
 	
 	          res => {
-	            if (res.data.msg == "登录成功") {
+	            if (res.data.msg == "登录成功" &&this.count==1) {
 					alert("登录成功");
 					 this.$store.store.commit("setData",res.data.data);
-					
 	              this.$router.push("/");
-	            } else {
-	              alert("账号或者密码错误，请重新登录");
-	            }
+	            } 
+				else{
+					if(res.data.msg == "登录成功" &&this.count==2){
+							alert("登录成功");
+							this.$store.store.commit("setadmindata",res.data.data);
+							this.$router.push("/");
+					}
+					else{
+						if(res.data.msg == "登录成功" &&this.count==3){
+								alert("登录成功");
+								this.$router.push("/admin");
+						}
+						else {
+						              alert("账号或者密码错误，请重新登录");
+						            }
+					}
+				}
 	          },
 	          err => {
 	            console.log(err);

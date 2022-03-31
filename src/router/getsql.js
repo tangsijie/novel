@@ -18,4 +18,5 @@ router.post("/tuijianshowSql", getsql.tuijianshowSql);
 router.post("/getfufenleiSql", getsql.getfufenleiSql);
 router.post("/zifenleiSql", getsql.zifenleiSql);
 router.post("/unizifenleiSql", getsql.unizifenleiSql);
+router.post("/searchSql", getsql.searchSql);
 module.exports = router;

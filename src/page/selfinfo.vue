@@ -53,6 +53,46 @@
 		  </el-form-item>
 		</el-form>
 	</div>
+	    <el-upload
+		class="upimg"
+	  action="http://127.0.0.1:3000/uploadImg/upload"
+	  list-type="picture-card"
+	  :auto-upload="true"
+	   :limit="1"
+	  :on-success="getsuccess"
+	  >
+	    <i slot="default" class="el-icon-plus"></i>
+	    <div slot="file" slot-scope="{file}">
+	      <img
+	        class="el-upload-list__item-thumbnail"
+	        :src="file.url" alt="" 
+	      >
+	      <span class="el-upload-list__item-actions">
+	        <span
+	          class="el-upload-list__item-preview"
+	          @click="handlePictureCardPreview(file)"
+	        >
+	          <i class="el-icon-zoom-in"></i>
+	        </span>
+	        <span
+	          v-if="!disabled"
+	          class="el-upload-list__item-delete"
+	          @click="handleDownload(file)"
+	        >
+	          <i class="el-icon-download"></i>
+	        </span>
+	        <span
+	          v-if="!disabled"
+	          class="el-upload-list__item-delete"
+	          @click="handleRemove(file)"
+	        >
+	          <i class="el-icon-delete"></i>
+	        </span>
+	      </span>
+	    </div>
+	</el-upload>
+	<p class="touxiang">头像</p>
+	<div class="imgshow"><img :src="LoginUser.img" alt=""></div>
 	<div class="infomid2"> 
 		<el-form :model="LoginUser" status-icon :rules="rules" ref="LoginUser" label-width="100px" class="demo-ruleForm">
 		  <el-form-item label="新密码" prop="rpwd">
@@ -132,6 +172,13 @@
 	      };
 	    },
 	    methods: {
+			//上传图片
+			getsuccess(res){
+			  // this.geturl= 'data:image/png;base64,'+res.data
+			  this.bookimg=res.data.path
+							console.log('img',this.bookimg)
+			  //解析图片
+			},
 			gaimimashow(){
 				if(this.LoginUser.rpwd==this.mima.checkPass){
 			        axios({
@@ -196,7 +243,8 @@
 				// params:{date:1}
 			},
 			getuser(){
-					this.LoginUser=this.$store.store.state.user			  
+					this.LoginUser=this.$store.store.state.user	
+							  this.LoginUser.img = 'data:image/jpg;base64,'+this.LoginUser.img ;
 			},
 			resetForm(LoginUser) {
 			        this.$refs[LoginUser].resetFields();
@@ -293,5 +341,37 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+	.imgshow{
+		width: 100px;
+		height: 100px;
+		position: absolute;
+		background-color: #000000;
+		right: 322px;
+		top: 95px;
+	}
+	.imgshow>img{
+		display: block;
+		width: 100%;
+		height: 100%;
+		border-radius: 100%;
+		
+	}
+	.upimg>>>.el-upload--picture-card{
+		width: 100px;
+		height: 100px;
+		position: absolute;
+		right: 445px;
+		top: 95px;
+	}
+	.el-icon-plus{
+		margin-top: -10px;
+	}
+	.touxiang{
+		position: absolute;
+		right: 560px;
+		top:136px;
+		font-size: 14px;
+		    color: #606266;
 	}
 </style>

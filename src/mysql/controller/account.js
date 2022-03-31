@@ -1,5 +1,6 @@
 const db = require("../core/mysql.js");
 const moment = require("moment");
+const fs = require('fs');
 const jwt = require("jwt-simple");
 class AccountCountroller {
   //注册
@@ -47,16 +48,26 @@ class AccountCountroller {
   }
   //登录
   async login(request, response, next) {
-    let loginSql = " SELECT * FROM reader WHERE rname=? AND rpwd=? ; ";
+    let loginSql = " ";
     let params = [request.body.no, request.body.pwd, request.body.status];
-    if (params[2] == 2) {
-      loginSql = " SELECT * FROM writer WHERE wname=? AND wpwd=? ; ";
-    } else if (params[2] == 3) {
-      loginSql = " SELECT * FROM admin WHERE aname=? AND apwd=? ; ";
-    }
+   if (params[2] == 1) {
+     loginSql = "SELECT * FROM reader WHERE rname=? AND rpwd=? ; ";
+   }
+	else {
+		if (params[2] == 2) {
+		  loginSql = " SELECT * FROM writer WHERE wname=? AND wpwd=? ; ";
+		} 
+		else{
+			if(params[2] == 3) {
+			  loginSql = " SELECT * FROM admin WHERE aname=? AND apwd=? ; ";
+			}
+		}
+	}
     try {
       let result = await db.exec(loginSql, params);
+	 result[0].img = fs.readFileSync(result[0].img, 'base64');
       if (result && result.length >= 1) {
+		
         // console.log("访问服务器成功！"),
           response.json({
             code: 200,

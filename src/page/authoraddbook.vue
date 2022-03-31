@@ -115,25 +115,26 @@ import axios from "axios";
         getsuccess(res){
         // this.geturl= 'data:image/png;base64,'+res.data
         this.bookimg=res.data.path
+				console.log('img',this.bookimg)
         //解析图片
       },
-      onSubmit() {
-        console.log(this.form);
-        axios({
-		         method: "post",
-	            url: "http://127.0.0.1:3000/author/createbook",
-                data:{
-                    bookname:this.form.name,
-                    writer:"zzl",
-                    jieshao:this.form.jianjie,
-                    fufenlei:this.form.fufenlei,
-                    zifenlei:this.form.zifenlei,
-                    bookimg:this.bookimg
-                }
-                    }).then(res => {
-                        alert("创建成功")
-                            })
-      },
+      // onSubmit() {
+      //   console.log(this.form);
+      //   axios({
+		    //      method: "post",
+	     //        url: "http://127.0.0.1:3000/author/createbook",
+      //           data:{
+      //               bookname:this.form.name,
+      //               writer:"zzl",
+      //               jieshao:this.form.jianjie,
+      //               fufenlei:this.form.fufenlei,
+      //               zifenlei:this.form.zifenlei,
+      //               bookimg:this.bookimg
+      //           }
+      //               }).then(res => {
+      //                   alert("创建成功")
+      //                       })
+      // },
       checkiffufenlei(){
           console.log(this.form.fufenlei)
           if (this.form.fufenlei !== ''){
