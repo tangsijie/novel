@@ -27,7 +27,6 @@
 	<div class="cont">
 		
 		<div class="cont1">
-			
 			<div><img src="../../static/img/10.jpg" ></div>
 			<div  id="code" v-show="isshow" style="display:block; position: absolute;right: 120px;top: -30px;background-color:white;width:180px;height: 200px;">
 				<div>
@@ -249,7 +248,7 @@
 			      }).then(
 			        res => {
 					this.tuijianshowmesg = res.data.data;
-					this.isaddshujiashow();
+					
 					console.log('tuijianshow',this.tuijianshowmesg[0].num)
 			        },
 			        err => {
@@ -409,16 +408,17 @@
 											  })
 					}
 					else {
-						let shu=this.getBook.tuijianshu;
-						console.log('shu',shu+1);
-						if(this.isaddtuijianmesg.length == 0 ||this.isaddtuijianmesg[0].tuijianshu == 0){
+						this.isaddtuijianshow();
+						// let shu=this.getBook.tuijianshu;
+						// console.log('shu',shu+1);
+						if(this.isaddtuijianmesg.length == 0 ){
 							axios({
 							        method: "post",
 							        url: "http://127.0.0.1:3000/getSql/addtuijianSql",
 							        data: {
 							          username:this.LoginUser.rname,
 									  bookname:this.getBook.bookname,
-									  tuijianshu:shu+1,
+									  tuijianshu:1,
 									
 							        },
 							      }).then(
@@ -427,7 +427,7 @@
 											this.getttuitimer();
 											this.delttuitimer();
 											this.isaddtui=false;
-							 //               this.$router.go(0);
+							               this.tuijianshow();
 							            } 
 							        },
 							        err => {
@@ -435,21 +435,42 @@
 							        }
 							      );
 						}
-						else{
-							console.log('已推荐该书')
+						else if(this.isaddtuijianmesg[0].tuijianshu == 0){
+							axios({
+							        method: "post",
+							        url: "http://127.0.0.1:3000/getSql/updatetuijianSql",
+							        data: {
+									  tuijianshu:1,
+									  username:this.LoginUser.rname,
+									  bookname:this.getBook.bookname,
+							        },
+							      }).then(
+							        res => {
+										if (res.data.msg == "更新推荐成功") {
+											this.getttuitimer();
+											this.delttuitimer();
+											this.isaddtui=false;
+							               this.tuijianshow();
+							            } 
+							        },
+							        err => {
+							          console.log(err.msg);
+							        }
+							      );
 						}
 					 }
 					},
 				//取消推荐按钮
 				deltuijian(){
-					let shu=this.isaddtuijianmesg[0].tuijianshu;
-					console.log('shu',shu-1)
-						if(this.isaddtuijianmesg.length == 1){
+					this.isaddtuijianshow();
+					// let shu=this.isaddtuijianmesg[0].tuijianshu;
+					// console.log('shu',shu-1)
+						if(this.isaddtuijianmesg.length == 1 && this.isaddtuijianmesg[0].tuijianshu == 1){
 							axios({
 							        method: "post",
 							        url: "http://127.0.0.1:3000/getSql/updatetuijianSql",
 							        data: {
-									  tuijianshu:shu-1,
+									  tuijianshu:0,
 									  username:this.LoginUser.rname,
 									  bookname:this.getBook.bookname,
 							        },
@@ -460,7 +481,7 @@
 											this.getttui2timer();
 											this.delttui2timer();
 											this.isaddtui=true;
-											 // this.$router.go(0);
+											this.tuijianshow();
 							            } 
 							        },
 							        err => {
@@ -512,7 +533,7 @@
 			//展示接口数据
 			//判断是否可以加入书架推荐
 			//检查是否已加入书架推荐状态
-			
+			this.isaddshujiashow();
 			
 		},
 		components:{
@@ -580,7 +601,7 @@
 		background: url(../../static/img/9.jpg) no-repeat;
 		background-size: 100% 100%;
 		position: absolute;
-		z-index: -1;
+		z-index: 0;
 	}
 	#bimg>div:last-child{
 		position: absolute;

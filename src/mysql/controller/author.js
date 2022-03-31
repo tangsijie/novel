@@ -45,7 +45,7 @@ class AccountCountroller {
    //创建书本
    async createbook(request, response, next) {
     let insertSql = " INSERT INTO book (bookname,writer,jieshao,fufenlei,zifenlei,bookimg) value (?,?,?,?,?,?); ";
-    let params = [request.body.fufenlei];
+    let params = [request.body.bookname,request.body.writer,request.body.jieshao,request.body.fufenlei,request.body.zifenlei,request.body.bookimg];
     try {
       let result = await db.exec(insertSql, params);
       if (result && result.length >= 1) {

@@ -121,7 +121,7 @@ import axios from "axios";
         console.log(this.form);
         axios({
 		         method: "post",
-	            url: "http://127.0.0.1:3000/admin/createbook",
+	            url: "http://127.0.0.1:3000/author/createbook",
                 data:{
                     bookname:this.form.name,
                     writer:"zzl",
@@ -140,7 +140,7 @@ import axios from "axios";
               this.iffufenlei = false
                axios({
 		         method: "post",
-	            url: "http://127.0.0.1:3000/admin/getzifenlei",
+	            url: "http://127.0.0.1:3000/author/getzifenlei",
                 data:{
                     fufenlei:this.form.fufenlei
                 }

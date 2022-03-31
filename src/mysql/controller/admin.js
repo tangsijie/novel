@@ -305,7 +305,7 @@ async getreader(request, response, next) {
     }
   }
   //添加管理员
-  async   (request, response, next) {
+  async addadmin(request, response, next) {
     let insertSql = " INSERT  INTO admin (aname,apwd) VALUE(?,?); ";
     let params = [request.body.aname,request.body.apwd];
     try {
