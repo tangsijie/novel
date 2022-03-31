@@ -16,6 +16,8 @@ import authorAdmin from '../page/authorAdmin.vue'
 import superadmin from '../page/superadmin.vue'
 import writebook from '../page/writebook.vue'
 import authoraddbook from '../page/authoraddbook.vue'
+import authordetail from '../page/authordetail.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -89,6 +91,11 @@ export default new Router({
 			path:'/authoraddbook',//页面的一个路径
 			name:'authoraddbook',
 			component:authoraddbook//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+		},
+		{
+			path:'/authordetail',//页面的一个路径
+			name:'authordetail',
+			component:authordetail//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		}
 		
   ]
