@@ -1,7 +1,93 @@
 const db = require("../core/mysql.js");
 const moment = require("moment");
+const fs = require('fs');
 const jwt = require("jwt-simple");
 class AccountCountroller {
+//评论
+	async addcommentSql(request, response, next) {
+		let comimg = "SELECT img  FROM reader where rname=? ; ";
+		let params2 = [request.body.username];
+		let result2 = await db.exec(comimg, params2);
+	    let comSql = " INSERT INTO message(username,img,value,bookname)VALUE(?,?,?,?);";
+	    let params = [request.body.username,result2[0].img,request.body.value,request.body.bookname];
+	    try {
+	      let result = await db.exec(comSql, params);
+		  
+	      if (result && result.affectedRows >= 1) {
+	          response.json({
+	            code: 200,
+	            msg: "加入评论成功",
+	            data: result,
+	            // token: "createToken(result)"
+	          });
+	      } else {
+	        response.json({
+	          code: 200,
+	          msg: "加入评论失败",
+	          data: result
+	        });
+			
+	      }
+	    } catch (error) {
+	      //TODO handle the exception
+	      response.json({
+	        code: 200,
+	        msg: "服务器异常",
+	        error
+	      });
+	    }
+	    function createToken(data) {
+	      return jwt.encode(
+	        {
+	          exp: Date.now() + 1000 * 60 * 60 * 24,
+	          info: data
+	        },
+	        require("../config").tokenKey
+	      );
+	    }
+	  }
+		//展示评论表
+		async commentshowSql(request, response, next) {
+		    let comshowSql = " SELECT *  FROM message where bookname=? ; ";
+		    let params = [request.body.bookname];
+		    try {
+		      let result = await db.exec(comshowSql, params);
+			  for(var i = 0 ;i<result.length;i++){
+			  	result[i].img =  fs.readFileSync(result[i].img, 'base64');
+			  }
+		      if (result && result.length >= 1) {
+		          response.json({
+		            code: 200,
+		            msg: "展示推荐",
+		            data: result,
+		            token: "createToken(result)"
+		          });
+		      } else {
+		        response.json({
+					
+		          code: 200,
+		          msg: "登录失败",
+		          data: result
+		        });
+		      }
+		    } catch (error) {
+		      //TODO handle the exception
+		      response.json({
+		        code: 200,
+		        msg: "服务器异常",
+		        error
+		      });
+		    }
+		    function createToken(data) {
+		      return jwt.encode(
+		        {
+		          exp: Date.now() + 1000 * 60 * 60 * 24,
+		          info: data
+		        },
+		        require("../config").tokenKey
+		      );
+		    }
+		  }
 	//搜索功能
 	async searchSql(request, response, next) {
 	    let getsSql = " SELECT * FROM book where bookname like '%"+request.body.inputvalue+"%'; ";

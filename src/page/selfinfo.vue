@@ -244,7 +244,7 @@
 			},
 			getuser(){
 					this.LoginUser=this.$store.store.state.user	
-							  this.LoginUser.img = 'data:image/jpg;base64,'+this.LoginUser.img ;
+					this.LoginUser.img = 'data:image/jpg;base64,'+this.LoginUser.img ;
 			},
 			resetForm(LoginUser) {
 			        this.$refs[LoginUser].resetFields();

@@ -19,4 +19,6 @@ router.post("/getfufenleiSql", getsql.getfufenleiSql);
 router.post("/zifenleiSql", getsql.zifenleiSql);
 router.post("/unizifenleiSql", getsql.unizifenleiSql);
 router.post("/searchSql", getsql.searchSql);
+router.post("/addcommentSql", getsql.addcommentSql);
+router.post("/commentshowSql", getsql.commentshowSql);
 module.exports = router;

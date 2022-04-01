@@ -40,7 +40,7 @@
 						<span>类型</span>
 					</div>
 					<div>
-						<p>{{book.starttime}}</p>
+						<p>{{book.starttime.substring(0,10)}}</p>
 						<span>上架</span>
 					</div>
 					<div>
@@ -80,13 +80,18 @@
 		  </div>
 				<el-backtop></el-backtop>
 		<div class="comment">
-			<input type="text" name="" id="" value="" placeholder="快点来一起评论吧"/>
-			<div class="fabiao">发表</div>
+			<input type="text" v-if="comshow" class="site" placeholder="快点来一起评论吧" @click="com"/>
+			<div class="com-box" v-if="comshow2">
+			<textarea class="site2" maxlength="150" @input="descInput" v-model="desc" placeholder="快点来一起评论吧" >
+			</textarea>
+			<span class="xianzhi">{{remnant}}/150</span>
+			<div class="fabiao" @click="fabiao">发表</div>
+			</div>
 			<div class="comment-box">
-				<div>
-					<div class="img-box"><img src="../../static/img/touxiang2.jpg" ></div>
-					<p class="com-name">天妒英才</p><p class="com-time">发表于2018-03-20 11:20:39</p>
-					<div class="com-value">的的说法地方大师asfasfsafsf第三方的考试辅导hi返回的我i非得分后卫为哦发窘为凤尾u发傅为对方</div>
+				<div v-for="(item,index) in comshowmeag" :key="index">
+					<div class="img-box"><img :src="item.img" ></div>
+					<p class="com-name">{{item.username}}</p><p class="com-time">发表于{{item.time | dateFmt('YYYY-MM-DD HH:mm:ss')}}</p>
+					<div class="com-value">{{item.value}}</div>
 					<div class="com-button">回复</div>
 				</div>
 			</div>
@@ -100,6 +105,11 @@
 	export default{
 			  data() {
 			        return {
+						comshowmeag:[],
+						comshow:true,
+						comshow2:false,
+						desc:'',
+						remnant: 0,
 						LoginUser:'',
 						dark:'',
 						fengmian:true,
@@ -116,6 +126,77 @@
 			        };
 			      },
 			      methods: {
+					  //发表评论
+					  fabiao(){
+						  axios({
+						            method: "post",
+						              url: "http://127.0.0.1:3000/getSql/addcommentSql",
+						            data: {
+						  			username:this.LoginUser.rname,
+						  			value:this.desc,
+						  			bookname:this.book.bookname,
+						            },
+						          }).then(
+						            res => {
+						  			if (res.data.msg == "加入评论成功") {
+						  			              alert("发表成功");
+						  			              this.commentshow();
+												this.comshow=true;
+												this.comshow2=false; 
+						  			            }
+						  			else if(res.data.msg == "加入评论失败"){
+						  				// alert("信息修改失败");
+						  			}
+						            },
+						            err => {
+						              console.log(err);
+						              
+						            }
+						          );
+					  },
+					  //展示评论
+					  commentshow(){
+					          axios({
+					            method: "post",
+					              url: "http://127.0.0.1:3000/getSql/commentshowSql",
+					            data: {
+					  			bookname:this.book.bookname,
+					            },
+					          }).then(
+					            res => {
+								console.log('2223',res.data.data)
+								
+								this.comshowmeag=res.data.data;
+					  			console.log('comshow',this.comshowmeag)
+								for(var i = 0 ;i<this.comshowmeag.length;i++){
+									this.comshowmeag[i].img = 'data:image/jpg;base64,'+ this.comshowmeag[i].img
+								}
+					            },
+					            err => {
+					              console.log(err);
+					              
+					            }
+					          );
+					      
+					  },
+					  //切换评论
+					  com(){
+						  if(this.LoginUser === ''){
+						  		alert("请先登录")
+						  		 this.$router.push({
+						  			path:'/loginRegister'
+						  						})
+						  }
+						  else{
+							this.comshow=false;
+							this.comshow2=true;  
+						  }
+					  },
+					  //剩余字数
+					   descInput(){
+					   var txtVal = this.desc.length;
+					   this.remnant =  txtVal;
+					   },
 					  //夜晚模式
 					 yewan(){
 						 if(this.dark==false){
@@ -175,7 +256,7 @@
 						  this.book=this.$route.params.detailmesg;
 						  this.zhangjie=this.$route.params.zhangjiemesg;
 						  this.LoginUser=this.$store.store.state.user;
-						  console.log('num',this.num);
+						  this.commentshow();
 					  },
 					     handleSizeChange(val) {
 					          // console.log(`每页 ${val} 条`);
@@ -226,6 +307,7 @@
 						},
 			        },
 					mounted(){
+						
 						this.getdata();
 						window.addEventListener('scroll', this.handleScroll);
 						window.ontouchmove = this.handleScroll;
@@ -579,40 +661,39 @@
 		top: 115px;
 		margin: 30px auto 20px;
 	}
+	.com-box{
+		position: relative;
+	}
 	.fabiao{
 		background-color: #bf2c24;
-		float: right;
-		top: 25px;
-		right: 30px;
-		position: relative;
+		bottom: 10px;
+		right: 150px;
+		position: absolute;
+		z-index: 99;
 		font-size: 14px;
-		    line-height: 29px;
-		    width: 68px;
-		    height: 29px;
-		    text-align: center;
-		    border-radius: 2px;
-	}
-	.comment>input{
-		width: 70%;
-		height: 35px;
-		left: 50%; 
-		position: relative;
-	    margin-left: -40%;
-		margin-top: 20px;
+		line-height: 29px;
+		width: 68px;
+		height: 29px;
+		text-align: center;
+		border-radius: 2px;
+		color: white;
 	}
 	.comment-box{
 		width: 100%;
 		
 	}
 	.comment-box>div{
-		margin: 20px 20px 20px;
+		/* margin: 20px 20px 20px; */
 		width: 100%;
 		position: relative;
 		padding-bottom: 20px;
+		border-bottom: 1px solid #888888;
 	}
 	.img-box{
 		width: 50px;
 		height: 50px;
+		margin-top: 20px;
+		margin-left: 20px;
 	}
 	.img-box>img{
 		display: block;
@@ -623,12 +704,15 @@
 	.com-name{
 		position: absolute;
 		top: 10px;
-		left: 60px;
+		left: 80px;
 	}
 	.com-time{
 		top: 10px;
 		right: 30px;
 		position: absolute;
+		    font-size: 12px;
+		    font-weight: 400;
+		    color: #999;
 	}
 	.com-value{
 		margin-left: 30px;
@@ -636,10 +720,43 @@
 		width: 70%;
 		max-height: 200px;
 		overflow: auto;
+		    font: 14px/1.5 'MicroSoft YaHei';
+		    color: #333;
 	}
 	.com-button{
+		background-color:#a6a6a6 ;
 		margin-left: 80%;
 		width: 40px;
 		margin-top: 10px;
+		text-align: center;
+		border-radius: 2px;
+		font-size: 14px;
+		padding: 5px 10px 5px;
+	}
+	.site{
+		width: 70%;
+		height: 35px;
+		left: 50%; 
+		position: relative;
+		margin-left: -40%;
+		margin-top: 20px;
+	}
+	.site2{
+		width: 70%;
+		height: 150px;
+		left: 50%; 
+		position: relative;
+		margin-left: -40%;
+		margin-top: 20px;
+	}
+	.xianzhi{
+		display: block;
+		z-index: 12;
+		bottom: 15px;
+		right: 230px;
+		font-size: 14px;
+		margin-top: 4px;
+		color: #a6a6a6;
+		position: absolute;
 	}
 </style>
