@@ -117,8 +117,46 @@ class AccountCountroller {
       );
     }
   }
-
-
+//获取该书的所有章节
+async addsection(request, response, next) {
+  let insertSql = " INSERT INTO zhangjie(bookname,zhangjieshu,title,value) value (?,?,?,?); ";
+  let params = [request.body.bookname,request.body.zhangjieshu,request.body.title,request.body.value];
+  try {
+    let result = await db.exec(insertSql, params);
+    if (result && result.length >= 1) {
+      // console.log("访问服务器成功！"),
+        response.json({
+          code: 200,
+          msg: "查询成功",
+          data: result,
+          token: "createToken(result)"
+        });
+    } else {
+      response.json({
+        code: 200,
+        msg: "登录失败",
+        data: result
+      });
+    }
+  } catch (error) {
+    //TODO handle the exception
+    response.json({
+      code: 200,
+      msg: "服务器异常",
+      error
+    });
+  }
+  function createToken(data) {
+    return jwt.encode(
+      {
+        exp: Date.now() + 1000 * 60 * 60 * 24,
+        info: data
+      },
+      require("../config").tokenKey
+    );
+  }
+  }
+  //
 
 
 

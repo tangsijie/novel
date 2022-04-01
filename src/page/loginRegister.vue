@@ -173,7 +173,11 @@
 					if(res.data.msg == "登录成功" &&this.count==2){
 							alert("登录成功");
 							this.$store.store.commit("setadmindata",res.data.data);
-							this.$router.push("/");
+							this.$router.push(
+								{
+									name:'authordetail'
+								}
+							);
 					}
 					else{
 						if(res.data.msg == "登录成功" &&this.count==3){

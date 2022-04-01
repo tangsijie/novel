@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div id="context"></div>
+    <div style="width:80%;margin: 40px auto">
+      <span>章节数：</span><el-input v-model="zhangjieshu" label="章节数" style="margin-bottom:10px"></el-input>
+     <span>章节名：</span> <el-input v-model="title" label="章节名"></el-input>
+    </div>
+    
+    <div id="context" style="width:80%;margin:auto"></div>
+    <div style="display:flex;justify-content:center;margin-top:10px" ><el-button type="primary" @click="fabu">发布</el-button></div>
   </div>
 </template>
 
@@ -12,7 +18,26 @@ export default {
         return{
             editorData:'',
             editor:null,
+            zhangjieshu:'',
+            title:''
         }
+    },
+    methods:{
+      fabu(){
+         axios({
+		         method: "post",
+	            url: "http://127.0.0.1:3000/author/addsection",
+                data:{
+                    bookname:this.$route.params&&this.$route.params.bookname,
+                    zhangjieshu:this.zhangjieshu,
+                    title:this.title,
+                    value:this.editorData
+
+                }
+                    }).then(res => {
+                       alert("发布成功")
+                            })
+      }
     },
     mounted(){
          const editor = new wangEditor(`#context`)
