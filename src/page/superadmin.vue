@@ -1,45 +1,64 @@
 <template>
   <div style="height:100%">
       <el-container style="height:100%">
-      <el-aside width="250px" height="100%" style="background:#274b77">
-          <div @click="goadmin">读者管理</div>
-          <div @click="goauthorAdmin">作者管理</div>
-          <div style="background:rgb(26, 51, 82)">管理员管理</div>
+      <el-aside width="250px" height="100%" style="background:#55aa7f">
+          <div @click="goadmin" style="cursor: pointer;" >读者管理</div>
+          <div @click="goauthorAdmin" style="cursor: pointer;">作者管理</div>
+          <div style="cursor: pointer;background:rgb(95, 95, 95)">小说审核</div>
+		  <div @click="tuichu" style="cursor: pointer;">退出系统</div>
       </el-aside>
       <el-main>
-          <el-button type="primary" style="margin:10px" @click="addadmin">添加管理员</el-button>
+          <!-- <el-button type="primary" style="margin:10px" @click="addadmin">添加管理员</el-button> -->
           <el-table
-    :data="admin"
+    :data="shbook"
     border
     style="width: 100%">
     <el-table-column
       fixed
-      prop="adminid"
+      prop="id"
       label="id"
+	   width="60"
       >
     </el-table-column>
     <el-table-column
-      prop="aname"
-      label="管理名"
+      prop="bookname"
+      label="小说名"
+	   width="180"
       >
     </el-table-column>
     <el-table-column
-      prop="apwd"
-      label="密码"
+      prop="jieshao"
+      label="小说简介"
+	  show-overflow-tooltip
+	   
       >
     </el-table-column>
+	<el-table-column
+	  prop="starttime"
+	  label="创建时间"
+	   width="180"
+	  >
+	  <template slot-scope="scope">{{starttime| dateFmt('YYYY-MM-DD HH:mm:ss')}}</template>
+	</el-table-column>
+	<el-table-column
+	  prop="writer"
+	  label="作者"
+	  width="180"
+	  >
+	</el-table-column>
     <el-table-column
       fixed="right"
       label="操作"
-      width="100">
+      width="200">
       <template slot-scope="scope">
-        <el-button type="text" @click="deleteadmin(scope.row)"  size="small">删除</el-button>
+		  <el-button type="text" @click="updatesh(scope.row)"  size="small">审核通过</el-button>
+        <el-button type="text" @click="delbook(scope.row)"  size="small">不通过</el-button>
       </template>
     </el-table-column>
   </el-table>
       </el-main>
 </el-container>
-<el-dialog
+<!-- <el-dialog
   title="添加管理员"
   :visible.sync="dialogVisible"
   width="30%"
@@ -50,7 +69,7 @@
     <el-button @click="dialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="add">添加</el-button>
   </span>
-</el-dialog>
+</el-dialog> -->
 
   </div>
 </template>
@@ -61,11 +80,7 @@ export default {
     data(){
         // reader:''
         return{
-            admin:[{
-            adminid:1,
-            aname:"zzl",
-            apwd:"123",
-        }],
+          shbook:[],
         dialogVisible:false,
         adminpassword:'',
         adminname:''
@@ -73,6 +88,11 @@ export default {
        
     },
     methods:{
+		tuichu(){
+			this.$router.push({
+				name:'loginRegister'
+			})
+		},
          handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
@@ -90,46 +110,45 @@ export default {
                       path:'/authorAdmin'
                     })
                   },
-      getadmin(){
+      getsh(){
           axios({
 		         method: "post",
-	            url: "http://127.0.0.1:3000/admin/getadmin",
+	            url: "http://127.0.0.1:3000/admin/getshbook",
                     }).then(res => {
-                        this.admin = res.data.data;
+						this.shbook = res.data.data;
+						
                             })
                  },
-            deleteadmin(e){
+            delbook(e){
                  axios({
 		         method: "post",
-	            url: "http://127.0.0.1:3000/admin/deleteadmin",
+	            url: "http://127.0.0.1:3000/admin/deletebook",
                 data :{
-                    id:e.adminid
+                    id:e.id
                 }
                     }).then(res => {
-                         alert("删除成功")
-                        this.getadmin()
+                         alert("审核不通过")
+                        this.getsh()
                             })
                  },
-                 addadmin(){
-                     this.dialogVisible=true
-                 },
-                 add(){
-                      axios({
-		                method: "post",
-	                     url: "http://127.0.0.1:3000/admin/addadmin",
-                        data :{
-                             aname:this.adminname,
-                             apwd:this.adminpassword
-                            }
-                            }).then(res => {
-                                alert("添加成功")
-								this.dialogVisible = false
-                             this.getadmin()
-                                 })
-                 }
+                 // addadmin(){
+                 //     this.dialogVisible=true
+                 // },
+              updatesh(e){
+                   axios({
+                   method: "post",
+                  url: "http://127.0.0.1:3000/admin/updateshSql",
+                  data :{
+                      id:e.id
+                  }
+                      }).then(res => {
+                           alert("审核通过")
+                          this.getsh()
+                              })
+                   },
                      },
 			mounted() {
-							this.getadmin()
+							this.getsh()
 						}
 }
 </script>
@@ -153,6 +172,6 @@ html,body{
     font-weight: bold;
 }
 .el-aside>div:hover{
-    background:rgb(26, 51, 82);
+    color: brown;
 }
 </style>

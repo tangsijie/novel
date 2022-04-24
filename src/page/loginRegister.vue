@@ -5,9 +5,9 @@
 				<div class="big-contain" v-if="isLogin">
 					<div class="btitle">账户登录</div>
 					<div class="bform">
-						<input type="email" placeholder="账号" v-model="isaccount">
+						<input type="email" placeholder="账号" v-model="isaccount" style="cursor: default;">
 						<span class="errTips" v-if="emailError">* 账号填写错误 *</span>
-						<input type="password" placeholder="密码" v-model="ispassword">
+						<input type="password" placeholder="密码" v-model="ispassword" style="cursor: default;">
 						<span class="errTips" v-if="emailError">* 密码填写错误 *</span>
 					</div>
 					<div class="radioss">
@@ -21,10 +21,10 @@
 				<div class="big-contain" v-else>
 					<div class="btitle">创建账户</div>
 					<div class="bform">
-						<input type="text" placeholder="用户名" v-model="lisaccount">
+						<input type="text" placeholder="用户名" v-model="lisaccount" style="cursor: default;">
 						<span class="errTips" v-if="existed">* 用户名已经存在！ *</span>
-						<input type="password" placeholder="密码" v-model="lispassword">
-						<input type="password" placeholder="确认密码" v-model="lispassword2">
+						<input type="password" placeholder="密码" v-model="lispassword" style="cursor: default;">
+						<input type="password" placeholder="确认密码" v-model="lispassword2" style="cursor: default;">
 					</div>
 					<div class="radioss">
 							<label></label>
@@ -38,12 +38,12 @@
 			</div>
 			<div class="small-box" :class="{active:isLogin}">
 				<div class="small-contain" v-if="isLogin">
-					<div class="stitle" @click="home1">回去首页!</div>
+					<div class="stitle" @click="home1" style="cursor: pointer;">回去首页!</div>
 					<p class="scontent">开始注册，和我们一起旅行</p>
 					<button class="sbutton" @click="changeType">注册</button>
 				</div>
 				<div class="small-contain" v-else>
-					<div class="stitle" @click="home1">回去首页!</div>
+					<div class="stitle" @click="home1" style="cursor: pointer;">回去首页!</div>
 					<p class="scontent">与我们保持联系，请登录你的账户</p>
 					<button class="sbutton" @click="changeType">登录</button>
 				</div>

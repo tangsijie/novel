@@ -26,16 +26,16 @@
 				</el-input>
 				  <el-button icon="el-icon-search" circle style="position: relative; margin-left: -30px;"></el-button>
 				  <el-dropdown>
-				       <span class="el-dropdown-link" style="color: white;">
+				       <span class="el-dropdown-link" style="color: white;cursor: pointer;">
 				         个人中心<i class="el-icon-arrow-down el-icon--right"></i>
 				       </span>
 				       <el-dropdown-menu slot="dropdown">
-				         <el-dropdown-item icon="el-icon-plus">我的书架</el-dropdown-item>
-				         <el-dropdown-item icon="el-icon-circle-plus">我的信息</el-dropdown-item>
-				         <el-dropdown-item icon="el-icon-circle-plus-outline">我的消息</el-dropdown-item>
+						   <div @click="gomybook"><el-dropdown-item icon="el-icon-plus" >我的书架</el-dropdown-item></div>
+				         <div @click="goselfinfo"><el-dropdown-item icon="el-icon-circle-plus">个人信息</el-dropdown-item></div>
+				         <div @click="gomesg"><el-dropdown-item icon="el-icon-circle-plus-outline">我的消息</el-dropdown-item></div>
 				       </el-dropdown-menu>
 				     </el-dropdown>
-				  	<div style="color: white;"><i class="el-icon-reading"></i>我的书架</div>
+				  	<div style="color: white;cursor: pointer;"@click="gomybook" @click.stop=""><i class="el-icon-reading" ></i>我的书架</div>
 			</div>
 		</div>
 	</div>
@@ -47,10 +47,43 @@
 				
 			  data(){
 			        return {
-			         input: ''
+			         input: '',
+					 LoginUser:this.$store.store.state.user,
 			        };
 			      },
 			      methods: {
+					  gomybook(){
+						  if(this.LoginUser === ''){
+						  	alert("请先登录")
+						  	this.$router.push({
+						  		path:'/loginRegister'
+						  						  })
+						  }
+						  else {
+						this.$router.push({name:'self'})  }
+					  },
+					  goselfinfo(){
+						  if(this.LoginUser === ''){
+						  	alert("请先登录")
+						  	this.$router.push({
+						  		path:'/loginRegister'
+						  						  })
+						  }
+						  else {
+					  						this.$router.push({name:'selfinfo'})  
+					  }
+					  },
+					  gomesg(){
+						  if(this.LoginUser === ''){
+						  	alert("请先登录")
+						  	this.$router.push({
+						  		path:'/loginRegister'
+						  						  })
+						  }
+						  else {
+					  						this.$router.push({name:'message'})  
+					  }
+					  },
 			        home(){
 						this.$router.push({
 							name:"home"

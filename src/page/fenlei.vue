@@ -26,7 +26,7 @@
 					  <div class="booklist" >
 						  <div class="books" v-for="(item,index) in zifenleimesg" :key="index" @click="godetail(item)">
 							  <div class="box-shadow"></div>
-							  <div class="box-img"><img src="../../static/img/150.jpg" ></div>
+							  <div class="box-img"><img :src="item.bookimg" ></div>
 							  <h2>{{item.bookname}}</h2>
 							  <p>{{item.jieshao}}</p>
 						  </div>
@@ -89,7 +89,6 @@
 		},
 		methods:{
 			handleClick(e) {
-				console.log('e',e._props.label)
 					axios({
 					        method: "post",
 					        url: "http://127.0.0.1:3000/getSql/zifenleiSql",
@@ -99,6 +98,9 @@
 					      }).then(
 					        res => {
 							this.zifenleimesg = res.data.data;
+							for(var i = 0 ;i<this.zifenleimesg.length;i++){
+								this.zifenleimesg[i].bookimg = 'data:image/jpg;base64,'+ this.zifenleimesg[i].bookimg
+							}
 					        },
 					        err => {
 					          console.log(err.msg);
@@ -107,7 +109,6 @@
 			      },
 			getfufenleidata(){
 				this.fenleimesg=this.$route.params.passfenlei;
-				console.log('gofenlei2',this.fenleimesg )
 				this.unizifenleiSql();
 			},
 			unizifenleiSql(){
@@ -137,6 +138,9 @@
 				      }).then(
 				        res => {
 						this.zifenleimesg = res.data.data;
+						for(var i = 0 ;i<this.zifenleimesg.length;i++){
+							this.zifenleimesg[i].bookimg = 'data:image/jpg;base64,'+ this.zifenleimesg[i].bookimg
+						}
 				        },
 				        err => {
 				          console.log(err.msg);

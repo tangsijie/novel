@@ -1,10 +1,11 @@
 <template>
   <div style="height:100%">
       <el-container style="height:100%">
-      <el-aside width="250px" height="100%" style="background:#274b77">
-          <div @click="goadmin">读者管理</div>
-          <div style="background:rgb(26, 51, 82)">作者管理</div>
-          <div @click="gosuperadmin">管理员管理</div>
+      <el-aside width="250px" height="100%" style="cursor: pointer;background:#55aa7f">
+          <div @click="goadmin" style="cursor: pointer;">读者管理</div>
+          <div style="background:rgb(95, 95, 95)">作者管理</div>
+          <div @click="gosuperadmin" style="cursor: pointer;">小说审核</div>
+		  <div @click="tuichu" style="cursor: pointer;">退出系统</div>
       </el-aside>
       <el-main>
           <el-table
@@ -22,28 +23,7 @@
       label="作者名"
       width="120">
     </el-table-column>
-    <el-table-column
-      prop="wpwd"
-      label="密码"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="worknum"
-      label="作品数量"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="jianjie"
-      label="简介"
-      width="150">
-    </el-table-column>
-    <el-table-column
-      prop="status"
-      label="审核状态"
-      width="120">
-    </el-table-column>
      <el-table-column
-      fixed="right"
       label="操作"
       width="200">
       <template slot-scope="scope">
@@ -60,6 +40,7 @@
                         :visible.sync="dialogVisible"
                         fullscreen
                         :before-close="handleClose">
+						 <template><h2>共{{book.length}}本小说</h2></template>
                              <el-table
                                 :data="book"
                                 border
@@ -76,6 +57,7 @@
                                                  width="120">
                                             </el-table-column>
                                             <el-table-column
+											class="jies"
                                               prop="jieshao"
                                               label="介绍"
                                               width="120">
@@ -107,8 +89,9 @@
                                             </el-table-column>
                                              <el-table-column
                                               prop="starttime"
-                                              label="开始时间"
+                                              label="创建时间"
                                               width="120">
+											  <template slot-scope="scope">{{starttime| dateFmt('YYYY-MM-DD')}}</template>
                                             </el-table-column>
                                              <el-table-column
                                               fixed="right"
@@ -158,6 +141,11 @@ export default {
        
     },
     methods:{
+		tuichu(){
+			this.$router.push({
+				name:'loginRegister'
+			})
+		},
        handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
@@ -251,6 +239,7 @@ html,body{
     font-weight: bold;
 }
 .el-aside>div:hover{
-    background:rgb(26, 51, 82);
+    color: brown;
 }
+
 </style>

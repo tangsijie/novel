@@ -65,7 +65,13 @@ class AccountCountroller {
 	}
     try {
       let result = await db.exec(loginSql, params);
-	 result[0].img = fs.readFileSync(result[0].img, 'base64');
+	  console.log('img',result[0].img)
+	  if(result[0].img ==null){
+		  console.log('无头像')
+	  }
+	  else{
+		  result[0].img = fs.readFileSync(result[0].img, 'base64');
+	  }
       if (result && result.length >= 1) {
 		
         // console.log("访问服务器成功！"),

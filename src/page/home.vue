@@ -10,18 +10,18 @@
 				<p class="logo2">凤凰小说</p>
 			</div>
 				<div class="nav-mid">
-					<input class="search" type="text" v-model="searchvalue" placeholder="斗破苍穹" >
+					<input class="search" type="text" v-model="searchvalue" placeholder="斗破苍穹" style="cursor:default;">
 					<div class="search2" v-if="searchshow">
 						<p v-for="(item,index) in searchmesg" :key="index" @click="gobook(item)">{{item.bookname}}</p>
 					</div>
 					<el-button type="primary" icon="el-icon-search" @click="searchclick">搜索</el-button>
 				</div>
 				<div class="mybook-contain">
-					<div class="mybook" @click="gomybook">我的书</div>
-					<div @click="gologin" v-if='islogin'>登录</div>
-					<div @click="gologin" v-if='islogin'>注册</div>
-					<div v-if='!islogin'>你好，{{LoginUser.rname}}</div>
-					<div @click="signout" v-if='!islogin'>退出</div>
+					<div class="mybook" @click="gomybook" style="cursor: pointer;">我的书</div>
+					<div @click="gologin" v-if='islogin' style="margin-left: 40px;cursor: pointer;">登录</div>
+					<div @click="gologin" v-if='islogin' style="margin-left: 40px;cursor: pointer;">注册</div>
+					<div style="margin-left: 20px;" v-if='!islogin'>你好，{{LoginUser.rname}}</div>
+					<div style="margin-left: 40px;cursor: pointer;" @click="signout" v-if='!islogin'>退出</div>
 				</div>
 		</div>
 		
@@ -41,7 +41,7 @@
 		<div class="contain1">
 			<div style="width: 20%;">
 				<ul class="fenlei-contain">
-					<li v-for="(item,index) in fenlei.slice(0,14) " :key="index" @click="gofufenlei(item)">
+					<li v-for="(item,index) in fenlei.slice(0,14) " :key="index" @click="gofufenlei(item)" style="cursor: pointer;">
 						<i class="el-icon-reading"></i>
 						<p>{{item.fufenlei}}</p>
 						<p>{{mesg[index].fangwenliang}}</p>
@@ -92,12 +92,22 @@
 			<!-- <toplist></toplist> -->
 			<div style="width: 20%;">
 				<div id="pai">
-					<h3>本周推荐</h3>
+					<h3>总推荐排行榜</h3>
 					<ul>
-						<li v-for="(item,index) in mesg.slice(0,17)" :key="index" >
-							<div>{{item.fufenlei}}</div>
-							<div @click="gobook(item)">{{item.bookname}}<span v-if="index==0||index==4"></span></div>
-							<div class="zuozhe">{{item.writer}}</div>
+						<li v-for="(item,index) in mesg.slice(0,14)" :key="index" >
+							<div v-if="index==0" style="display: flex;width: 100%;position: relative;left: -30px;" @click="gobook(item)" class="ibox" >
+								<div style="text-align: left;width: 100px;float: left;">
+									<h3 class="ph1">NO.1</h3>
+									<h2 style="color: red;font-size: 16px;margin-top: 5px;">{{item.bookname}}</h2>
+									<p style="color: #bf2c24;font-size: 16px;padding: 3px 0 0;">{{item.tuijianshu}} 推荐</p>
+									<p>{{item.fufenlei}} - {{item.zifenlei}}</p>
+								</div>
+								<div class="tupian" style="width: 90px;height: 120px;overflow: hidden;border: 1px solid black;"><img  :src="item.bookimg" ></div>
+							</div>
+							
+							<div :class="ph[index]" v-if="index!=0">{{index+1}}</div>
+							<div @click="gobook(item)" v-if="index!=0">{{item.bookname}}<span v-if="index==0||index==4"></span></div>
+							<div class="zuozhe" v-if="index!=0">{{item.tuijianshu}}</div>
 						</li>
 					</ul>
 				</div>
@@ -113,7 +123,7 @@
 					</div>
 				</div>
 				<ul>
-					<li v-for="(item,index) in mesg.slice(0,6)" :key="index" @click="gobook(item)">
+					<li v-for="(item,index) in mesg.slice(0,6)" :key="index" @click="gobook(item)" style="cursor: pointer;">
 						<div>{{item.bookname}}</div>
 						<div> <p>41422</p><p>人在追</p></div>
 						<p>{{item.jieshao}}</p>
@@ -121,10 +131,10 @@
 				</ul>
 				<hr style="position: relative;top: 30px;">
 				<div class="conts-fre">
-					<div v-for="(item,index) in mesg.slice(0,2)" :key="index" @click="gobook(item)">
+					<div v-for="(item,index) in mesg.slice(0,2)" :key="index" @click="gobook(item)" style="cursor: pointer;">
 							<p>{{item.bookname}}<p>
 							<p>{{item.jieshao}}</p>
-						<img src="../assets/img/1.jpg" >
+						<img :src="item.bookimg" >
 					</div>
 				</div>
 			</div>
@@ -133,8 +143,8 @@
 					<h3>本周推荐</h3>
 					<ul>
 						<li v-for="(item,index) in mesg.slice(0,17)" :key="index" >
-							<div>{{item.fufenlei}}</div>
-							<div @click="gobook(item)">{{item.bookname}}<span v-if="index==0||index==4"></span></div>
+							<div class="tjb">{{item.fufenlei}}</div>
+							<div @click="gobook(item)" style="cursor: pointer;">{{item.bookname}}<span v-if="index==0||index==4"></span></div>
 							<div class="zuozhe">{{item.writer}}</div>
 						</li>
 					</ul>
@@ -156,6 +166,10 @@
 	 export default{
 		  data() {
 		        return {
+					ph:[
+						'ph1','ph2','ph3','ph4','ph4','ph5','ph6','ph7',
+						'ph8','ph9','ph10','ph11','ph12','ph13','ph14','ph15','ph16',
+					],
 					searchshow:false,
 					searchmesg:[],
 					searchvalue:'',
@@ -165,9 +179,9 @@
 					LoginUser:'',
 		         img_list2:[
 		           "../static/img/7.jpg",
-		            "../static/img/7.jpg",
-		            "../static/img/7.jpg",
-		            "../static/img/7.jpg",
+		            "../static/img/stgz.jpg",
+		            "../static/img/tmts.jpg",
+		            "../static/img/bly.jpg",
 		         ],
 				 islogin:true
 		        };
@@ -238,7 +252,7 @@
 					  }
 					  else {
 						 this.$router.push({
-						 		 path:'/self'
+						 		name:'self'
 						 })
 					  }
 				  },
@@ -289,7 +303,12 @@
 				      }).then(
 				        res => {
 						this.mesg = res.data.data;
-						// console.log("mesg",this.mesg);
+						this.mesg.sort((a,b)=>{
+							return -(a.tuijianshu - b.tuijianshu)
+						})
+						for(var i = 0 ;i<this.mesg.length;i++){
+							this.mesg[i].bookimg = 'data:image/jpg;base64,'+ this.mesg[i].bookimg
+						}
 						this.fufenleishow()
 				        },
 				        err => {
@@ -322,22 +341,56 @@
 		}
 		#pai>ul>li{
 			display: flex;
-			justify-content: space-between;
+			/* justify-content: space-between; */
+			align-items: center;
 		}
+	.tupian>img{
+		transition: all 0.6s;
+		width: 100%;
 		
-		#pai>ul>li>div:first-child{
+	}
+		.ibox:hover>.tupian>img{
+			transform: scale(1.2);
+		}
+		.tjb{
 		color: gray;
-	    height: 32px;
-	    margin-left: -8px;
 	    min-width: 56px;
 	    overflow: hidden;
 		font-size: 14px;
 		}
+		.ph1,.ph2,.ph3,.ph4,.ph5,.ph6,.ph7,.ph8,.ph9,.ph10,.ph11,.ph12,.ph13,.ph14,.ph15,.ph16{
+			background: #ededed;
+			color: #666;
+			font: 700 14px/16px Arial;
+			height: 16px;
+			letter-spacing: -1px;
+			margin-top: 8px;
+			overflow: hidden;
+			text-align: center;
+			width: 16px;
+		}
+		.ph1{
+			color: white;
+			background: #bf2c24;
+			width: 36px;
+		}
+		.ph2{
+			color: white;
+			    background: #e67225;
+		}
+		.ph3{
+			color: white;
+			    background: #e6bf25;
+		}
 	#pai>ul>li>div:first-child:hover{
 			color: red;
+			cursor: pointer;
+			transition: all 0.6s;
 		}
 	#pai>ul>li>div:nth-child(2):hover{
 			color: red;
+			cursor: pointer;
+			transition: all 0.6s;
 		}
 	#pai>ul>li>div:last-child:hover{
 			color: red;
@@ -352,8 +405,11 @@
 		display: flex;
 		justify-content:flex-start;
 		text-align: left;
+		line-height: 32px;
+		margin-left: 10px;
 		}
 	#pai>ul>li>div:last-child{
+		margin-left: 30px;
 		color: #b3b3b3;
 		float: right;
 		font: 12px/32px PingFangSC-Regular,-apple-system,Simsun;
@@ -361,10 +417,10 @@
 		text-align: right;
 		text-overflow: ellipsis;
 		white-space: normal;
-		width: 64px;
+		/* width: 64px; */
 		white-space: nowrap;
 		}
-	h3{
+	#pai>h3{
 			color: #1a1a1a;
 			    font-size: 18px;
 			    font-weight: 400;
@@ -431,7 +487,7 @@
 	.nav-mid{
 	}
 	.mybook-contain{
-		width: 200px;
+		/* width: 200px; */
 		display: flex;
 		justify-content: space-between;/* 把子容器平均排列无间隔 */
 		align-items: center;
@@ -534,9 +590,9 @@
 	 }
 	 .fenlei-contain>li>p{
 		 margin-left: 20px;
-		 width: 34px;
+		 /* width: 34px; */
 		 position: relative;
-		left: 30px;
+		/* left: 30px; */
 	 }
 	 .fenlei-contain>li>p:last-child{
 		 color:#999;
@@ -772,4 +828,5 @@
 			width: 24px;
 			z-index: 5;
 		}
+
 </style>

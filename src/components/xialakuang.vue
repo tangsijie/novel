@@ -5,11 +5,11 @@
 	    更多<i class="el-icon-arrow-down el-icon--right"></i>
 	  </span>
 	  <el-dropdown-menu slot="dropdown">
-	    <el-dropdown-item command="a">黄金糕</el-dropdown-item>
-	    <el-dropdown-item command="b">狮子头</el-dropdown-item>
-	    <el-dropdown-item command="c">螺蛳粉</el-dropdown-item>
-	    <el-dropdown-item command="d" >双皮奶</el-dropdown-item>
-	    <el-dropdown-item command="e" divided>蚵仔煎</el-dropdown-item>
+	    <el-dropdown-item command="a">现实</el-dropdown-item>
+	    <el-dropdown-item command="b">游戏</el-dropdown-item>
+	    <el-dropdown-item command="c">体育</el-dropdown-item>
+	    <el-dropdown-item command="d" >修仙</el-dropdown-item>
+	    <el-dropdown-item command="e" divided>历史</el-dropdown-item>
 	  </el-dropdown-menu>
 	</el-dropdown>
 	 

@@ -18,6 +18,9 @@ import writebook from '../page/writebook.vue'
 import authoraddbook from '../page/authoraddbook.vue'
 import authordetail from '../page/authordetail.vue'
 import authorbookdetail from '../page/authorbookdetail.vue'
+import editbook from '../page/editbook.vue'
+import message from '../page/message.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -48,7 +51,7 @@ export default new Router({
 		  component:detail//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
-		  path:'/self',//页面的一个路径
+		  path:'/self/:detailmesg/:zhangjiemesg',//页面的一个路径
 		  name:'self',
 		  component:self//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
@@ -98,10 +101,19 @@ export default new Router({
 			component:authordetail//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
-			path:'/authorbookdetail/:bookname',//页面的一个路径
+			path:'/authorbookdetail/:bookname/:zhangjiemesg',//页面的一个路径
 			name:'authorbookdetail',
 			component:authorbookdetail//申明你现在的这个路径是导向哪一个文件也就是页面的含义
-		}
-		
+		},
+		{
+			path:'/editbook',//页面的一个路径
+			name:'editbook',
+			component:editbook//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+		},
+		{
+			path:'/message',//页面的一个路径
+			name:'message',
+			component:message//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+		},
   ]
 })

@@ -1,14 +1,18 @@
 <template>
+<div>
+	
+	<div @click="goback" class="fh"><i class="el-icon-back"></i>返回</div>
   <div style="background:#f6f6f6;height:100%;padding:40px 0">
       <el-button type="primary" icon="el-icon-edit" circle style="position:fixed;right:30px" @click="gowritebook"></el-button>
       <div style="background:#fff;width:80%;margin: 0 auto; padding:20px" >
-          <div style="margin-bottom:20px">{{bookname}}</div>
-          <div style="display:flex;flex-wrap:wrap">
-              <div v-for="item in sections" :key="item" style="width:20%;margin:0 0 10px 0" class="section">{{item.zhangjieshu}} ： {{item.title}}</div>
-          </div>
+          <div style="margin-bottom:20px">{{this.bookmesg}}</div>
+          <div style="display:flex;flex-wrap:wrap;">
+              <div v-for="(item,index) in sections" :key="index" style="width:20%;margin:0 0 10px 0;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;" class="section" @click="dvalue(item)">{{item.zhangjieshu}} ： {{item.title}}</div>
+		  </div>
             
       </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -16,59 +20,54 @@
 export default {
  data(){
      return{
-         bookname:'斗破苍穹',
-         sections:[
-             {
-                 zhangjieshu:'第一章',
-                 title:'神秘老者'
-             },
-              {
-                 zhangjieshu:'第一章',
-                 title:'神秘老者'
-             },
-              {
-                 zhangjieshu:'第一章',
-                 title:'神秘老者'
-             },
-              {
-                 zhangjieshu:'第一章',
-                 title:'神秘老者'
-             },
-              {
-                 zhangjieshu:'第一章',
-                 title:'神秘老者'
-             },
-              {
-                 zhangjieshu:'第一章',
-                 title:'神秘老者'
-             },
-         ]
+		 detailvalue: false,
+         bookmesg:'',
+         sections:[],
      }
  },
  methods:{
+	 dvalue(e){
+		 this.$router.push({
+		     name:'editbook',
+		     params:{
+		        zhangjiemesg : e
+		     }
+		 })
+	 },
+	  
      getbookname(){
-         this.bookname =  this.$route.params&&this.$route.params.bookname
+         this.bookmesg =  this.$route.params.bookname;
+		 this.getsections();
      },
      getsections(){
           axios({
 		         method: "post",
-	            url: "http://127.0.0.1:3000/author/getsections",
+	            url: "http://127.0.0.1:3000/author/getbooksections",
                 data:{
-                    bookname:this.bookname
+                    bookname:this.bookmesg
                 }
                     }).then(res => {
                         this.sections = res.data.data
+						console.log('se',this.sections)
                             })
      },
+	 goback(){
+		 this.$router.push({
+		     name:'authordetail',
+		 })
+	 },
      gowritebook(){
          this.$router.push({
              name:'writebook',
              params:{
-                bookname : this.bookname
+                bookname : this.bookmesg
              }
          })
      }
- }
+ },
+		mounted(){
+			this.getbookname()
+		}
 }
 </script>
 
@@ -85,8 +84,21 @@ body,html{
 .section{
     font-size:14px;
     color:#3636c3;
+	cursor: pointer;
 }
 .section:hover{
-    color:rgb(8, 50, 238)
+    color:rgb(255, 0, 0)
+}
+.detailvalue{
+	position: absolute;
+	width: 40%;
+	top: 10%;
+	left: 10%;
+	background-color: white;
+}
+.fh:hover{
+	cursor: pointer;
+	color: #aa0000;
+	font-weight: 800;
 }
 </style>

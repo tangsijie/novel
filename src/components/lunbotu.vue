@@ -18,8 +18,8 @@
 		              "../static/img/1.jpg",
 		               "../static/img/2.jpg",
 		               "../static/img/90.jpg",
-		               "../static/img/1.jpg",
-					  "../static/img/2.jpg",
+		               "../static/img/10.jpg",
+					  "../static/img/11.jpg",
 		            ],
 		          }
 		        },

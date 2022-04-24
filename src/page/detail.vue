@@ -30,7 +30,7 @@
 		</div>
 			<div class="contianer-top" v-if="fengmian">
 				<div class="imgbox">
-					<img src="../../static/img/10.jpg" >
+					<img :src="book.bookimg" >
 				</div>
 				<h1>{{book.bookname}}</h1>
 				<h2>{{book.writer}} 著</h2>
@@ -40,7 +40,7 @@
 						<span>类型</span>
 					</div>
 					<div>
-						<p>{{book.starttime.substring(0,10)}}</p>
+						<p>{{book.starttime| dateFmt('YYYY-MM-DD')}}</p>
 						<span>上架</span>
 					</div>
 					<div>
@@ -58,7 +58,7 @@
 				<div class="contianer-last1" >
 					<span>{{zhangjie[this.num-1].zhangjieshu}}   {{zhangjie[this.num-1].title}}</span>
 					<pre>
-					<p>{{zhangjie[this.num-1].value}}</p>
+					<p v-html="zhangjie[this.num-1].value"></p>
 					</pre>
 				</div>
 				
@@ -87,13 +87,16 @@
 			<span class="xianzhi">{{remnant}}/150</span>
 			<div class="fabiao" @click="fabiao">发表</div>
 			</div>
-			<div class="comment-box">
-				<div v-for="(item,index) in comshowmeag" :key="index">
+			<div class="comment-box" >
+				<div v-for="(item,index) in comshowmeag" :key="index"  class="comall">
+					<!-- @mousemove="onmeshow(index)" @mouseleave="offmeshow(index)" -->
 					<div class="img-box"><img :src="item.img" ></div>
 					<p class="com-name">{{item.username}}</p><p class="com-time">发表于{{item.time | dateFmt('YYYY-MM-DD HH:mm:ss')}}</p>
 					<div class="com-value">{{item.value}}</div>
-					<div class="com-button">回复</div>
+					<div class="com-button" v-if="LoginUser !=''&&LoginUser.rname!=item.username">回复</div>
+					<div class="com-button" v-if="LoginUser !=''&&LoginUser.rname==item.username" @click="delmesg(item.id)" @click.stop="">删除</div>
 				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -105,6 +108,9 @@
 	export default{
 			  data() {
 			        return {
+						// current:0,
+						isreshow:false,
+						isdelshow:false,
 						comshowmeag:[],
 						comshow:true,
 						comshow2:false,
@@ -126,6 +132,27 @@
 			        };
 			      },
 			      methods: {
+					 
+					  // onmeshow:function(index){
+						 //  for(var i = 0 ;i<this.comshowmeag.length;i++){
+						 //  	if(this.LoginUser.rname==this.comshowmeag[i].username){
+						 //  								  this.isdelshow=true;
+						 //  								  this.current=index;
+						 //  	}
+						 //  	else
+						 //  	{
+						 //  								  this.isreshow=true;
+						 //  								  // this.isdelshow=true;
+						 //  								  this.current=index;
+						 //  	}
+						 //  }
+						  
+					  // },
+					  // offmeshow:function(index){
+						 //  this.isdelshow=false;
+						 //  this.isreshow=false;
+						 //  this.current=null;
+					  // },
 					  //发表评论
 					  fabiao(){
 						  axios({
@@ -143,6 +170,7 @@
 						  			              this.commentshow();
 												this.comshow=true;
 												this.comshow2=false; 
+												this.desc='';
 						  			            }
 						  			else if(res.data.msg == "加入评论失败"){
 						  				// alert("信息修改失败");
@@ -164,13 +192,14 @@
 					            },
 					          }).then(
 					            res => {
-								console.log('2223',res.data.data)
-								
 								this.comshowmeag=res.data.data;
-					  			console.log('comshow',this.comshowmeag)
+								this.comshowmeag.sort((a,b)=>{
+									return new Date(b.time) - new Date(a.time)
+								})
 								for(var i = 0 ;i<this.comshowmeag.length;i++){
 									this.comshowmeag[i].img = 'data:image/jpg;base64,'+ this.comshowmeag[i].img
 								}
+								// this.panduan();
 					            },
 					            err => {
 					              console.log(err);
@@ -178,6 +207,23 @@
 					            }
 					          );
 					      
+					  },
+					  //删除评论
+					  delmesg(e){
+					   axios({
+					           method: "post",
+					           url: "http://127.0.0.1:3000/getSql/delmycommentSql",
+					           data: {
+					             id: [e]
+					           },
+					         }).then(
+					  res => {
+						  alert("删除成功");
+						   this.commentshow();
+					          },
+					          err => {
+					            console.log(err.msg);
+					          })
 					  },
 					  //切换评论
 					  com(){
@@ -279,7 +325,6 @@
 							this.num++;
 							this.currentPage3=this.num;
 							document.documentElement.scrollTop = 0;
-							console.log('next',this.num);
 						},
 						//上一章
 						pre(){
@@ -293,7 +338,6 @@
 								this.fengmian=false;
 								this.num--;
 								this.currentPage3=this.num;
-								console.log('pre',this.num);
 								document.documentElement.scrollTop = 0;
 							}
 						},
@@ -340,7 +384,7 @@
 		position: absolute;
 		z-index: 10;
 		width: 48.7%;
-		margin-left: 344.5px;
+		margin-left: 379.5px;
 		top: 115px;
 		padding: 10px 10px;
 		background: white;
@@ -374,7 +418,7 @@
 		position: fixed;
 		z-index: 10;
 		width: 48.7%;
-		margin-left: 344.5px;
+		margin-left: 379.5px;
 		top: 0px;
 		padding: 10px 10px;
 		background: white;
@@ -442,7 +486,7 @@
 		z-index: 102;
 		top: 115px;
 		left: 50%;
-		margin-left: -420px;
+		margin-left: -453px;
 		position: absolute;
 		width: 60px;
 		font-family: PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light','Microsoft YaHei',sans-serif;
@@ -482,7 +526,7 @@
 		z-index: 102;
 		top: 0px;
 		left: 50%;
-		margin-left: -420px;
+		margin-left: -453px;
 		position: fixed;
 		width: 60px;
 		font-family: PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light','Microsoft YaHei',sans-serif;
@@ -680,9 +724,9 @@
 	}
 	.comment-box{
 		width: 100%;
-		
+		position: relative;
 	}
-	.comment-box>div{
+	.comall{
 		/* margin: 20px 20px 20px; */
 		width: 100%;
 		position: relative;
@@ -724,10 +768,12 @@
 		    color: #333;
 	}
 	.com-button{
+		cursor: pointer;
 		background-color:#a6a6a6 ;
 		margin-left: 80%;
+		position: absolute;
 		width: 40px;
-		margin-top: 10px;
+		margin-top: -20px;
 		text-align: center;
 		border-radius: 2px;
 		font-size: 14px;

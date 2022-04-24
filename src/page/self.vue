@@ -10,25 +10,24 @@
 				<div >我的首页</div>
 			</li>
 			<li>
-				<div>消息中心</div>
+				<div @click="$router.push('/message')" style="cursor: pointer;"> 消息中心</div>
 			</li>
-			<li @click="$router.push('/selfinfo')">
+			<li @click="goselfinfo" style="cursor: pointer;">
 				<div>个人资料</div>
 			</li>
 		</ul>
-		<b @click="$router.push('/')">小说首页</b>
+		<b @click="$router.push('/')" style="cursor: pointer;">小说首页</b>
 		<p>{{LoginUser.rname}}</p>
-		<span @click="signout">退出</span>
+		<span @click="signout" style="cursor: pointer;">退出</span>
 	</div>
 	<div class="self-mid">
 		<div class="self-midtop">
 			<div class="touxiang">
-				<div><img src="../../static/img/touxiang2.jpg"></div>
+				<div><img :src="imgurl"></div>
 				<div></div>
 			</div>
 			<div class="midright">
-				<h3 v-if="!!shujiamesg">{{shujiamesg[0].username}}<i>Lv0</i></h3>
-				<div v-else>{{ "" }}</div>
+				<h3>{{LoginUser.rname}}<i>Lv0</i></h3>
 				<div>
 					<p>安全级别</p>
 					<div>
@@ -49,20 +48,19 @@
 		</div>
 		<div class="self-midbottom">
 			<div class="search">
-				<input type="text" name="" placeholder="输入作品名或作家" />
-				<div>搜书架</div>
+				<el-input class="ser" v-model="input2" clearable placeholder="输入作品名或作家" @blur="shujiashow"></el-input>
+				<div class="search2" @click="searchclick">搜书架</div>
 			</div>
 			<div class="shujialist">
 				<div class="shujialist1">
 					<h2>我的书架</h2>
-					<p>共<strong>{{shujiamesg.length}}</strong>本书籍</p>
+					<p>共<strong >{{shujiamesg.length}}</strong>本书籍</p>
 				</div>
 				<el-table
 				  ref="multipleTable"
 				  :data="shujiamesg"
 				  tooltip-effect="dark"
 				  style="width: 100%"
-				  
 				  @selection-change="handleSelectionChange">
 				  
 				  <el-table-column
@@ -80,6 +78,7 @@
 				    prop="time"
 				    label="更新时间"
 				    width="100">
+					<template slot-scope="scope">{{scope.row.time.substring(0,10)}}</template>
 				  </el-table-column>
 				  <el-table-column
 				    prop="writer"
@@ -90,7 +89,17 @@
 				  <el-table-column
 				    prop="delete"
 				    label="操作"
-				    width="80"><div>删除</div>
+					 fixed="right"
+				    width="100">
+					  <template slot-scope="scope">
+						  <el-button @click="godetail(scope.row)" type="text" size="small">查看</el-button>
+					        <el-button
+					          @click="delone(scope.row)"
+					          type="text"
+					          size="small">
+					          移除
+					        </el-button>
+					      </template>
 				  </el-table-column>
 				</el-table>
 				<div style="margin-top: 20px">
@@ -113,21 +122,70 @@
 		
 		data(){
 			return{
-				shujiamesg:'',
+				imgurl:{},
+				searchmesg:[],
+				input2:'',
+				zhangjie2:[],
+				mesg2:[],
+				shujiamesg:[],
 				tableChecked: [],
 				     idStr:'',
-				LoginUser:'',
+				LoginUser:{},
 
 				        multipleSelection: []
 			}
 		},
 		methods:{
-			getbox(){
-				var that=this;
-				 setTimeout(function () {
-				         
-						 console.log('a')
-				        }, 1000)
+			//搜索功能
+			searchclick(){
+					 axios({
+						    method: "post",
+						    url: "http://127.0.0.1:3000/getSql/searchsjSql",
+						    data:{
+							username:this.LoginUser.rname,
+						    inputvalue2:this.input2,
+						    }
+						  }).then(
+						    res => {
+						this.shujiamesg = res.data.data;
+						    },
+						    err => {
+						      console.log(err.msg);
+						    }
+						  );
+			},
+			godetail(e){
+				//获取某本书的信息
+				      axios({
+				        method: "post",
+				        url: "http://127.0.0.1:3000/getSql/getoneSql",
+				        data: {
+				           bookname:e.bookname
+				        }
+				      }).then(
+				        res => {
+						this.mesg2 = res.data.data;
+						this.mesg2[0].bookimg = 'data:image/jpg;base64,'+ this.mesg2[0].bookimg
+						});
+				//章节获取
+				      axios({
+				        method: "post",
+				        url: "http://127.0.0.1:3000/getSql/zhangjieSql",
+				        data: {
+							bookname:e.bookname
+				        }
+				      }).then(
+				        res => {
+							this.zhangjie2 = res.data.data;
+							this.$router.push({
+								name:'detail',
+								params:{
+									detailmesg:this.mesg2[0],
+									zhangjiemesg:this.zhangjie2,
+								}
+							});
+				        },
+				      );
 			},
 			signout() {
 			  this.$store.store.commit('setData','');//更新userInfo
@@ -137,8 +195,14 @@
 								 	path:'/'
 								 })
 			},
+			goselfinfo(){
+				this.$router.push({
+					name:'selfinfo'
+				})
+			},
 			getuser(){
-					this.LoginUser=this.$store.store.state.user			  
+					this.LoginUser=this.$store.store.state.user;
+					this.imgurl ='data:image/jpg;base64,'+this.$store.store.state.user.img;
 			},
 			shujiashow() {
 			      axios({
@@ -151,20 +215,17 @@
 			      }).then(
 			        res => {
 					this.shujiamesg = res.data.data;
+					for(var i = 0 ;i<this.shujiamesg.length;i++){
+						this.shujiamesg[i].bookimg = 'data:image/jpg;base64,'+ this.shujiamesg[i].bookimg
+					}
 			        },
 			        err => {
 			          console.log(err.msg);
 			        }
 			      );
 			    },
+			//一键删除
 			delshujiashow() {
-				
-				this.$confirm('此操作将删除小说, 是否继续?', '提示', {
-				       confirmButtonText: '确定',
-				       cancelButtonText: '取消',
-				       type: 'warning',
-				       center: true
-				   }).then(() => {
 				       this.idStr=this.idStr.split(',')
 					   axios({
 					           method: "post",
@@ -173,25 +234,35 @@
 					           data: {
 					             id: this.idStr
 					           },
-					         })}
-					   )
-				       .then(
+					         }).then(
 					  res => {
-						  if (res.data.msg == "删除成功") {
-						                alert("删除成功")
-						  console.log('why');
-						  this.$router.push({
-						  		 path:'/'
-						  });
-						  this.getbox();
-						  this.$router.push({
-						  		 path:'/self'
-						  });
-						              }
+						  alert("删除成功");
+						   this.shujiashow();
 					          },
 					          err => {
 					            console.log(err.msg);
 					          })
+					  
+			    },
+			//单个删除
+			delone(e) {
+					 console.log('test',e.id);
+					   axios({
+					           method: "post",
+					           url: "http://127.0.0.1:3000/getSql/delshujiaSql",
+								
+					           data: {
+					             id: [e.id]
+					           },
+					         }).then(
+					  res => {
+						  alert("删除成功");
+						   this.shujiashow();
+					          },
+					          err => {
+					            console.log(err.msg);
+					          })
+					  
 			    },
 			 toggleSelection(rows) {
 			        if (rows) {
@@ -398,13 +469,16 @@
 		margin:30px auto;
 		align-items: center;
 	}
-	.search>input{
-		width: 294px;
+	.el-input{
+		width: 300px;
+	}
+	.ser>>>.el-input__inner{
+		    width: 294px;
 		    height: 36px;
 		    padding: 0 10px;
 		    outline: 0;
 	}
-	.search>div{
+	.search2{
 		line-height: 38px;
 		    min-width: 42px;
 		    padding: 0 15px;

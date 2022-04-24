@@ -1,10 +1,11 @@
 <template>
   <div style="height:100%">
       <el-container style="height:100%">
-      <el-aside width="250px" height="100%" style="background:#274b77">
-          <div style="background:rgb(26, 51, 82)">读者管理</div>
-          <div @click="goauthorAdmin">作者管理</div>
-          <div @click="gosuperadmin">管理员管理</div>
+      <el-aside width="250px" height="100%" style="background:#55aa7f">
+          <div style="cursor: pointer;background:rgb(95, 95, 95)" >读者管理</div>
+          <div @click="goauthorAdmin" style="cursor: pointer;">作者管理</div>
+          <div @click="gosuperadmin" style="cursor: pointer;">小说审核</div>
+					<div @click="tuichu" style="cursor: pointer;">退出系统</div>
       </el-aside>
       <el-main>
           <el-table
@@ -22,11 +23,7 @@
       label="用户名"
       width="120">
     </el-table-column>
-    <el-table-column
-      prop="rpwd"
-      label="密码"
-      width="120">
-    </el-table-column>
+    
     <el-table-column
       prop="email"
       label="邮箱"
@@ -53,7 +50,6 @@
       width="220">
     </el-table-column>
     <el-table-column
-      fixed="right"
       label="操作"
       width="100">
       <template slot-scope="scope">
@@ -86,6 +82,11 @@ export default {
        
     },
     methods:{
+			tuichu(){
+				this.$router.push({
+					name:'loginRegister'
+				})
+			},
       getreader(){
           axios({
 		         method: "post",
@@ -145,6 +146,6 @@ html,body{
     font-weight: bold;
 }
 .el-aside>div:hover{
-    background:rgb(26, 51, 82);
+    color: brown;
 }
 </style>

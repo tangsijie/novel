@@ -8,5 +8,6 @@ router.post("/createbook", author.createbook);
 router.post("/getauthorbook", author.getauthorbook);
 router.post("/getbooksections", author.getbooksections);
 router.post("/addsection", author.addsection);
-
+router.post("/delauthorbook", author.delauthorbook);
+router.post("/updatesection", author.updatesection);
 module.exports = router;

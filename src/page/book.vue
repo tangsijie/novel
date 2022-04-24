@@ -13,9 +13,13 @@
 			<p>已取消推荐</p>
 		</div>
 	<bookone></bookone>
-	<div id="bimg">
-	<div >切换背景</div>
-	</div>
+	<transition name="el-zoom-in-center">
+		<div id="bimg" v-if="bg1"></div>
+	</transition>
+	<transition name="el-zoom-in-center">
+		<div id="bimg2" v-if="bg2"></div>
+	</transition>
+	<div class="changebg" @click="changebg" @click.stop="">切换背景</div>
 		<el-breadcrumb separator-class="el-icon-arrow-right">
 		  <el-breadcrumb-item class="myColor" :to="{ name:'home' }" >首页</el-breadcrumb-item>
 		  <el-breadcrumb-item class="myColor" ><span >{{getBook.fufenlei}}</span></el-breadcrumb-item>
@@ -27,8 +31,9 @@
 	<div class="cont">
 		
 		<div class="cont1">
-			<div><img src="../../static/img/10.jpg" ></div>
-			<div  id="code" v-show="isshow" style="display:block; position: absolute;right: 120px;top: -30px;background-color:white;width:180px;height: 200px;">
+			<div v-if="!!getBook"><img :src="getBook.bookimg" ></div>
+			<div v-else>{{}}</div>
+			<div  id="code" v-show="isshow" style="display:block; position: absolute;right: 208px;top: -30px;background-color:white;width:180px;height: 200px;">
 				<div>
 					<div>
 						<p style="border-top:1px solid black;position: absolute;bottom: 130px;left: 50px;padding-top: 10px;">凤凰公众号</p>
@@ -54,22 +59,20 @@
 					<em>12.16</em>
 					<cite>万字</cite>
 					<i>|</i>
-					<em>
-					{{this.tuijianshowmesg[0].num}}
-					</em>
+					<em>{{tjs}}</em>
 					<cite>总推荐</cite>
 					<i>|</i>
-					<em>48</em>
-					<cite>周推荐</cite>
+					<em>{{getBook.fangwenliang}}</em>
+					<cite>訪問量</cite>
 					<i>|</i>
 				</p>
 				<div class="ma">
 					
-					<div @click="godetail">免费试读</div>
-					<div v-if="isadd" @click="addbook">加入书架</div>
+					<div @click="godetail" style="cursor: pointer;">开始阅读</div>
+					<div v-if="isadd" @click="addbook" style="cursor: pointer;">加入书架</div>
 					<div v-if="!isadd" >已在书架</div>
-					<div v-if="isaddtui" @click="addtuijian">推荐该书</div>
-					<div v-if="!isaddtui" @click="deltuijian" >已推荐该书</div>
+					<div v-if="isaddtui" @click="addtuijian" style="cursor: pointer;">推荐该书</div>
+					<div v-if="!isaddtui" @click="deltuijian" style="cursor: pointer;">已推荐该书</div>
 					<div id="xin" @mousemove="controlshow" @mouseleave="controldown">下载APP 新人免费读</div>
 				</div>
 				
@@ -98,8 +101,8 @@
 							<div class="lab3">
 								<p>最新章节</p>
 								<div>
-									<div v-for="(item,index) in zhangjie.slice(0,30)" :key="index">
-										<p>{{item.zhangjieshu}} {{item.title}}</p><i>-</i><em>{{item.time}}</em>
+									<div v-for="(item,index) in zhangjie.slice(0,30)" :key="index" >
+										<p>{{item.zhangjieshu}} {{item.title}}</p><i>-</i><em>{{item.time.substring(0,10)}}</em>
 									</div>
 								</div>
 							</div>
@@ -120,14 +123,14 @@
 									<em>6</em>
 								</li>
 								<li>
-									<span></span>
-									<p>作品总数</p>
-									<em>6</em>
+									<span style="background-position: -249px -150px;"></span>
+									<p>累计字数</p>
+									<em>600万</em>
 								</li>
 								<li>
-									<span></span>
-									<p>作品总数</p>
-									<em>6</em>
+									<span style="background-position: -50px -222px;"></span>
+									<p>创作天数</p>
+									<em>620天</em>
 								</li>
 							</ul>
 						</div>
@@ -170,6 +173,9 @@
 	export default{
 		data(){
 			return{
+				bg1:false,
+				bg2:true,
+				tjs:'',
 				tuijianshowmesg:[],
 				isaddtuijianmesg:[],
 				isaddshujiamesg:[],
@@ -188,6 +194,17 @@
 			
 		},
 		methods:{
+			changebg(){
+				if(this.bg1==true){
+					this.bg1=false;
+					this.bg2=true;
+				}
+				else
+				{
+					this.bg1=true;
+					this.bg2=false;
+				}
+			},
 			// 获取用户数据
 			getuserdata(){
 				this.LoginUser=this.$store.store.state.user;
@@ -197,6 +214,7 @@
 			//获取点的具体书本信息
 			getbookdata(){
 			 this.getBook=this.$route.params.book;
+			 	// this.getBook[0].bookimg = 'data:image/jpg;base64,'+ this.getBook[0].bookimg;
 			 this.shujiashow();
 			},
 			//书架表展示
@@ -248,8 +266,7 @@
 			      }).then(
 			        res => {
 					this.tuijianshowmesg = res.data.data;
-					
-					console.log('tuijianshow',this.tuijianshowmesg[0].num)
+					this.tjs = this.tuijianshowmesg[0].tuijianshu;
 			        },
 			        err => {
 			          console.log(err.msg);
@@ -365,6 +382,7 @@
 				}
 				else {
 					if(this.isaddshujiamesg.length == 0){
+						console.log('l',this.getBook.bookimg)
 						let length=this.zhangjie.length;
 						axios({
 						        method: "post",
@@ -436,11 +454,13 @@
 							      );
 						}
 						else if(this.isaddtuijianmesg[0].tuijianshu == 0){
+							let shu = this.tuijianshowmesg[0].tuijianshu;
 							axios({
 							        method: "post",
 							        url: "http://127.0.0.1:3000/getSql/updatetuijianSql",
 							        data: {
 									  tuijianshu:1,
+									   tuijianshu2:shu+1,
 									  username:this.LoginUser.rname,
 									  bookname:this.getBook.bookname,
 							        },
@@ -463,7 +483,7 @@
 				//取消推荐按钮
 				deltuijian(){
 					this.isaddtuijianshow();
-					// let shu=this.isaddtuijianmesg[0].tuijianshu;
+					let shu = this.tuijianshowmesg[0].tuijianshu;
 					// console.log('shu',shu-1)
 						if(this.isaddtuijianmesg.length == 1 && this.isaddtuijianmesg[0].tuijianshu == 1){
 							axios({
@@ -471,6 +491,7 @@
 							        url: "http://127.0.0.1:3000/getSql/updatetuijianSql",
 							        data: {
 									  tuijianshu:0,
+									  tuijianshu2:shu-1,
 									  username:this.LoginUser.rname,
 									  bookname:this.getBook.bookname,
 							        },
@@ -602,10 +623,21 @@
 		background-size: 100% 100%;
 		position: absolute;
 		z-index: 0;
+		box-sizing: border-box;
 	}
-	#bimg>div:last-child{
+	#bimg2{
+		width: 100%;
+		height: 300px;
+		background: url(../../static/img/8.jpg) no-repeat;
+		background-size: 100% 100%;
 		position: absolute;
-		z-index: 10;
+		z-index: 0;
+		box-sizing: border-box;
+	}
+	.changebg{
+		cursor: pointer;
+		position: absolute;
+		z-index: 99;
 		right: 17px;
 		/* background-color: rgba(0,0,0,.3); */
 		background-color: #000000;
@@ -900,6 +932,11 @@
 	.lab3>div>div>em{
 		font: 14px/22px Arial;
 		color: #999;
+		overflow: hidden;
+		text-align: left;
+		text-overflow: ellipsis;
+		white-space: normal;
+		white-space: nowrap;
 	}
 	.cont2-right{
 		width: 30%;
@@ -988,6 +1025,7 @@
 		    background-position: -193px -80px;
 		    background-size: 335px;
 	}
+	
 	.cont2-right>div>ul>li>p{
 		    font: 12px/18px PingFangSC-Regular,'-apple-system',Simsun;
 		    color: #666;

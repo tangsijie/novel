@@ -1,8 +1,10 @@
 <template>
   <div>
+	  
+	  <div class="zp" @click="gozj" style="cursor: pointer;"><i class="el-icon-back"></i>我的作品</div>
     <div style="width:80%;margin: 40px auto">
-      <span>章节数：</span><el-input v-model="zhangjieshu" label="章节数" style="margin-bottom:10px"></el-input>
-     <span>章节名：</span> <el-input v-model="title" label="章节名"></el-input>
+      <span>章节数：</span><el-input v-model="zhangjieshu" label="章节数" style="margin-bottom:10px;width: 200px;"></el-input>
+     <span>章节名：</span> <el-input v-model="title" label="章节名" style="width: 300px;margin-left: -5px;"></el-input>
     </div>
     
     <div id="context" style="width:80%;margin:auto"></div>
@@ -23,12 +25,17 @@ export default {
         }
     },
     methods:{
+		gozj(){
+			this.$router.push({
+				name:'authorbookdetail'
+			})
+		},
       fabu(){
          axios({
 		         method: "post",
 	            url: "http://127.0.0.1:3000/author/addsection",
                 data:{
-                    bookname:this.$route.params&&this.$route.params.bookname,
+                    bookname:this.$route.params.bookname,
                     zhangjieshu:this.zhangjieshu,
                     title:this.title,
                     value:this.editorData
@@ -36,6 +43,9 @@ export default {
                 }
                     }).then(res => {
                        alert("发布成功")
+					   this.$router.push({
+					   	name:'authorbookdetail'
+					   })
                             })
       }
     },
@@ -78,5 +88,9 @@ export default {
 }
 body,html{
   height: 100%;
+}
+.zp:hover{
+	color: #aa0000;
+	font-weight: 800;
 }
 </style>

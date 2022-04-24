@@ -7,18 +7,18 @@
 		</div>
 		<ul>
 			<li>
-				<div @click="goself">我的首页</div>
+				<div @click="goself" style="cursor: pointer;">我的首页</div>
 			</li>
 			<li>
-				<div>消息中心</div>
+				<div @click="$router.push('/message')" style="cursor: pointer;">消息中心</div>
 			</li>
 			<li  style="background-color: #ee4259;">
 				<div>个人资料</div>
 			</li>
 		</ul>
-		<b @click="$router.push('/')">小说首页</b>
-		<p>昵称</p>
-		<span>退出</span>
+		<b @click="$router.push('/')" style="cursor: pointer;">小说首页</b>
+		<p>{{LoginUser.rname}}</p>
+		<span @click="signout" style="cursor: pointer;">退出</span>
 	</div>
 	<div class="infomidall">
 	<div class="infomid">
@@ -53,46 +53,7 @@
 		  </el-form-item>
 		</el-form>
 	</div>
-	    <el-upload
-		class="upimg"
-	  action="http://127.0.0.1:3000/uploadImg/upload"
-	  list-type="picture-card"
-	  :auto-upload="true"
-	   :limit="1"
-	  :on-success="getsuccess"
-	  >
-	    <i slot="default" class="el-icon-plus"></i>
-	    <div slot="file" slot-scope="{file}">
-	      <img
-	        class="el-upload-list__item-thumbnail"
-	        :src="file.url" alt="" 
-	      >
-	      <span class="el-upload-list__item-actions">
-	        <span
-	          class="el-upload-list__item-preview"
-	          @click="handlePictureCardPreview(file)"
-	        >
-	          <i class="el-icon-zoom-in"></i>
-	        </span>
-	        <span
-	          v-if="!disabled"
-	          class="el-upload-list__item-delete"
-	          @click="handleDownload(file)"
-	        >
-	          <i class="el-icon-download"></i>
-	        </span>
-	        <span
-	          v-if="!disabled"
-	          class="el-upload-list__item-delete"
-	          @click="handleRemove(file)"
-	        >
-	          <i class="el-icon-delete"></i>
-	        </span>
-	      </span>
-	    </div>
-	</el-upload>
-	<p class="touxiang">头像</p>
-	<div class="imgshow"><img :src="LoginUser.img" alt=""></div>
+	 
 	<div class="infomid2"> 
 		<el-form :model="LoginUser" status-icon :rules="rules" ref="LoginUser" label-width="100px" class="demo-ruleForm">
 		  <el-form-item label="新密码" prop="rpwd">
@@ -105,8 +66,73 @@
 		    <el-button type="primary" @click="gaimimashow">提交</el-button>
 		    <el-button @click="rest('LoginUser')">重置</el-button>
 		  </el-form-item>
+		 <!-- <el-form-item>
+			  <div style="display:flex;justify-content: space-around;">	
+			  <p class="touxiang">头像</p>
+			  <div class="imgshow" style="height:150px;width:150px;margin-right:10px;"><img :src="imgurl" alt=""></div>
+			  <div>
+			  <el-upload
+			  	class="upimg"
+			    action="http://127.0.0.1:3000/uploadImg/upload"
+			    list-type="picture-card"
+			    :auto-upload="true"
+			     :limit="1"
+			    :on-success="getsuccess"
+			    >
+			      <i slot="default" class="el-icon-plus"></i>
+			      <div slot="file" slot-scope="{file}">
+			        <img
+			          class="el-upload-list__item-thumbnail"
+			          :src="file.url" alt="" 
+			        >
+			        <span class="el-upload-list__item-actions">
+			          <span
+			            class="el-upload-list__item-preview"
+			            @click="handlePictureCardPreview(file)"
+			          >
+			            <i class="el-icon-zoom-in"></i>
+			          </span>
+			          <span
+			            v-if="!disabled"
+			            class="el-upload-list__item-delete"
+			            @click="handleDownload(file)"
+			          >
+			            <i class="el-icon-download"></i>
+			          </span>
+			          <span
+			            v-if="!disabled"
+			            class="el-upload-list__item-delete"
+			            @click="handleRemove(file)"
+			          >
+			            <i class="el-icon-delete"></i>
+			          </span>
+			        </span>
+			      </div>
+			  </el-upload>
+			  </div>
+			  </div>
+			 
+		  </el-form-item> -->
+		  
+		 <el-form-item label="头像">
+			 <div class="imgshow" style="height:150px;width:150px;margin-right:10px;"><img :src="imgurl" alt=""></div>
+		 <el-upload
+		  :limit="1"
+		   :on-success="getsuccess"
+		   action="http://127.0.0.1:3000/uploadImg/upload"
+		   list-type="picture-card"
+		   :on-preview="handlePictureCardPreview"
+		   :on-remove="handleRemove">
+		   <i class="el-icon-plus"></i>
+		 </el-upload>
+		 <el-dialog :visible.sync="dialogVisible">
+		   <img width="100%" :src="dialogImageUrl" alt="">
+		 </el-dialog>
+		   </el-form-item>
+		   
 		</el-form>
 	</div>
+	
 	</div>
 </div>
 </template>
@@ -136,7 +162,12 @@
 					};
 					
 	      return {
-			  LoginUser:'',
+			  bookimg:'',
+			   dialogImageUrl: '',
+			  dialogVisible: false,
+			  disabled: false,
+			  LoginUser:{},
+			  imgurl:{},
 			  mima:{
 				 checkPass:''
 			  },
@@ -219,17 +250,20 @@
 						shengri:this.LoginUser.shengri,
 						sex:this.LoginUser.sex,
 						jianjie:this.LoginUser.jianjie,
+						img:this.bookimg,
 			          },
 			        }).then(
 			          res => {
 						if (res.data.msg == "更新成功") {
 						              alert("信息修改成功");
-						              this.$router.go(0);
+						             this.$router.push({
+										name:'loginRegister'
+				})
 						            }
 						else if(res.data.msg == "更新失败"){
 							// alert("信息修改失败");
 						}
-						this.gaimimashow()
+						
 			          },
 			          err => {
 			            console.log(err);
@@ -239,12 +273,22 @@
 			    },
 			goself(){
 				// name:'self';
-				this.$router.push('/self')
+				this.$router.push({
+					name:'self'
+				})
 				// params:{date:1}
 			},
 			getuser(){
-					this.LoginUser=this.$store.store.state.user	
-					this.LoginUser.img = 'data:image/jpg;base64,'+this.LoginUser.img ;
+					this.LoginUser=this.$store.store.state.user;
+					this.imgurl ='data:image/jpg;base64,'+this.$store.store.state.user.img;
+			},
+			signout() {
+			  this.$store.store.commit('setData','');//更新userInfo
+								 alert("退出成功")
+								 this.getuser()
+								 this.$router.push({
+								 	path:'/'
+								 })
 			},
 			resetForm(LoginUser) {
 			        this.$refs[LoginUser].resetFields();
@@ -253,12 +297,22 @@
 	        this.$refs[mima].resetFields();
 			this.mima.checkPass='';
 	      },
-		   
+		   handleRemove(file) {
+		          console.log(file);
+		   				file.url ='';
+		   				this.disabled = false;
+		        },
+		        handlePictureCardPreview(file) {
+		          this.dialogImageUrl = file.url;
+		          this.dialogVisible = true;
+		        },
+				
+				
 	    },
 		mounted(){
 			this.updateSqlshow();
 			this.getuser();
-			
+			this.getsuccess();
 		},
 	  }
 </script>
@@ -343,12 +397,7 @@
 		align-items: center;
 	}
 	.imgshow{
-		width: 100px;
-		height: 100px;
-		position: absolute;
-		background-color: #000000;
-		right: 322px;
-		top: 95px;
+
 	}
 	.imgshow>img{
 		display: block;
@@ -358,20 +407,10 @@
 		
 	}
 	.upimg>>>.el-upload--picture-card{
-		width: 100px;
-		height: 100px;
-		position: absolute;
-		right: 445px;
-		top: 95px;
 	}
 	.el-icon-plus{
 		margin-top: -10px;
 	}
 	.touxiang{
-		position: absolute;
-		right: 560px;
-		top:136px;
-		font-size: 14px;
-		    color: #606266;
 	}
 </style>

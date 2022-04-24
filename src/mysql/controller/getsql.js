@@ -88,9 +88,90 @@ class AccountCountroller {
 		      );
 		    }
 		  }
+			//我的评论
+			async mycommentSql(request, response, next) {
+			    let mycomSql = " SELECT *  FROM message where username=? ; ";
+			    let params = [request.body.username];
+			    try {
+			      let result = await db.exec(mycomSql, params);
+			      if (result && result.length >= 1) {
+			          response.json({
+			            code: 200,
+			            msg: "展示推荐",
+			            data: result,
+			            token: "createToken(result)"
+			          });
+			      } else {
+			        response.json({
+						
+			          code: 200,
+			          msg: "登录失败",
+			          data: result
+			        });
+			      }
+			    } catch (error) {
+			      //TODO handle the exception
+			      response.json({
+			        code: 200,
+			        msg: "服务器异常",
+			        error
+			      });
+			    }
+			    function createToken(data) {
+			      return jwt.encode(
+			        {
+			          exp: Date.now() + 1000 * 60 * 60 * 24,
+			          info: data
+			        },
+			        require("../config").tokenKey
+			      );
+			    }
+			  }
+			//删除评论
+			async delmycommentSql(request, response, next) {
+			    let mycommentSql2 = " Delete from message where id=?;";
+			    let params = [request.body.id];
+					  let p=request.body.id;
+			    try {
+						for(var i = 0 ;i<p.length;i++){
+							let result = await db.exec(mycommentSql2, p[i]);
+						}
+			    if (result && result.length >= 1) {
+			        response.json({
+			          code: 200,
+			          msg: "删除成功",
+			          data: result,
+			          token: "createToken(result)"
+			        });
+			    } else {
+			      response.json({
+			    	
+			        code: 200,
+			        msg: "删除失败",
+			        data: result
+			      });
+			    }
+			    } catch (error) {
+			      //TODO handle the exception
+			      response.json({
+			        code: 200,
+			        msg: "服务器异常",
+			        error
+			      });
+			    }
+			    function createToken(data) {
+			      return jwt.encode(
+			        {
+			          exp: Date.now() + 1000 * 60 * 60 * 24,
+			          info: data
+			        },
+			        require("../config").tokenKey
+			      );
+			    }
+			  }
 	//搜索功能
 	async searchSql(request, response, next) {
-	    let getsSql = " SELECT * FROM book where bookname like '%"+request.body.inputvalue+"%'; ";
+	    let getsSql = " SELECT * FROM book where bookname like '%"+request.body.inputvalue+"%' and status='1'; ";
 	    let params = [request.body.inputvalue];
 	    try {
 	      let result = await db.exec(getsSql, params);
@@ -127,6 +208,7 @@ class AccountCountroller {
 	      );
 	    }
 	  }
+		
 	//修改密码
 	async updatemimaSql(request, response, next) {
 	    let updatemimaSql = " UPDATE reader SET rpwd=? WHERE readerid = ? ; ";
@@ -168,8 +250,8 @@ class AccountCountroller {
 	  }
 	//修改读者信息
 	async updateSql(request, response, next) {
-	    let updateSql = " UPDATE reader SET rname = ? ,rpwd = ? ,email=? ,phone=? ,shengri=? ,sex=? ,jianjie=? WHERE readerid = ? ; ";
-	    let params = [request.body.rname,request.body.rpwd,request.body.email,request.body.phone,request.body.shengri,request.body.sex,request.body.jianjie,request.body.readerid];
+	    let updateSql = " UPDATE reader SET img=?,rname = ? ,email=? ,phone=? ,shengri=? ,sex=? ,jianjie=? WHERE readerid = ? ; ";
+	    let params = [request.body.img,request.body.rname,request.body.email,request.body.phone,request.body.shengri,request.body.sex,request.body.jianjie,request.body.readerid];
 	    try {
 	      let result = await db.exec(updateSql, params);
 	      if (result && result.affectedRows >= 1) {
@@ -247,10 +329,13 @@ class AccountCountroller {
 	  //加入推荐表
 	  async addtuijianSql(request, response, next) {
 	      let addtuijianSql = " INSERT INTO tuijian(username,bookname,tuijianshu)VALUE(?,?,?);";
+				let addtuijianSql2 = " update book set tuijianshu = tuijianshu + 1 where bookname=?";
 	      let params = [request.body.username,request.body.bookname,request.body.tuijianshu];
+				let params2 = [request.body.bookname];
 	      try {
 	        let result = await db.exec(addtuijianSql, params);
-	        if (result && result.affectedRows >= 1) {
+			let result2 = await db.exec(addtuijianSql2, params2);
+	        if (result && result.affectedRows >= 1&&result2 && result2.affectedRows >= 1) {
 	            response.json({
 	              code: 200,
 	              msg: "推荐成功",
@@ -286,10 +371,13 @@ class AccountCountroller {
 			//更新推荐表
 			async updatetuijianSql(request, response, next) {
 			    let updatetuijianSql = " UPDATE tuijian SET tuijianshu = ? where bookname=? and username=?;";
+				let updatetuijianSql2 = " update book set tuijianshu = ? where bookname=?";
 			    let params = [request.body.tuijianshu,request.body.bookname,request.body.username];
+				let params2 = [request.body.tuijianshu2,request.body.bookname];
 			    try {
 			      let result = await db.exec(updatetuijianSql, params);
-			      if (result && result.affectedRows >= 1) {
+				  let result2 = await db.exec(updatetuijianSql2, params2);
+			      if (result && result.affectedRows >= 1&&result2 && result2.affectedRows >= 1) {
 			          response.json({
 			            code: 200,
 			            msg: "更新推荐成功",
@@ -324,7 +412,7 @@ class AccountCountroller {
 			  }
 			  //展示推荐数
 			  async tuijianshowSql(request, response, next) {
-			      let tuijianshowSql = " SELECT sum(tuijianshu)as num  FROM tuijian where bookname=? ; ";
+			      let tuijianshowSql = " SELECT * FROM book where bookname=? and status='1'; ";
 			      let params = [request.body.bookname];
 			      try {
 			        let result = await db.exec(tuijianshowSql, params);
@@ -402,8 +490,12 @@ class AccountCountroller {
 		  }
 	  //加入书架
 	  async addshujiaSql(request, response, next) {
-	      let addshujiaSql = " INSERT INTO shujia(username,bookname,status,fenlei,zhangjie,title,time,writer)VALUE(?,?,?,?,?,?,?,?);";
-	      let params = [request.body.username,request.body.bookname,request.body.status,request.body.fenlei,request.body.zhangjie,request.body.title,request.body.time,request.body.writer];
+		  let comimg2 = "SELECT bookimg  FROM book where bookname=? and status='1'; ";
+		  let params2 = [request.body.bookname];
+		  let result2 = await db.exec(comimg2, params2);
+		 
+	      let addshujiaSql = " INSERT INTO shujia(bookimg,username,bookname,status,fenlei,zhangjie,title,time,writer)VALUE(?,?,?,?,?,?,?,?,?);";
+	      let params = [result2[0].bookimg,request.body.username,request.body.bookname,request.body.status,request.body.fenlei,request.body.zhangjie,request.body.title,request.body.time,request.body.writer];
 	      try {
 	        let result = await db.exec(addshujiaSql, params);
 	        if (result && result.affectedRows >= 1) {
@@ -443,12 +535,55 @@ class AccountCountroller {
 	  async delshujiaSql(request, response, next) {
 	      let delshujiaSql = " Delete from shujia where id=?;";
 	      let params = [request.body.id];
+		  let p=request.body.id;
 	      try {
-	        let result = await db.exec(delshujiaSql, params);
+			for(var i = 0 ;i<p.length;i++){
+				let result = await db.exec(delshujiaSql, p[i]);
+			}
+	      if (result && result.length >= 1) {
+			  console.log('xx',msg)
+	          response.json({
+	            code: 200,
+	            msg: "删除成功",
+	            data: result,
+	            token: "createToken(result)"
+	          });
+	      } else {
+	        response.json({
+	      	
+	          code: 200,
+	          msg: "删除失败",
+	          data: result
+	        });
+	      }
+	      } catch (error) {
+	        //TODO handle the exception
+	        response.json({
+	          code: 200,
+	          msg: "服务器异常",
+	          error
+	        });
+	      }
+	      function createToken(data) {
+	        return jwt.encode(
+	          {
+	            exp: Date.now() + 1000 * 60 * 60 * 24,
+	            info: data
+	          },
+	          require("../config").tokenKey
+	        );
+	      }
+	    }
+	  //搜索书架
+	  async searchsjSql(request, response, next) {
+	      let getsSql2 = " SELECT * FROM shujia where username=? and bookname like '%"+request.body.inputvalue2+"%'; ";
+	      let params = [request.body.username,request.body.inputvalue2];
+	      try {
+	        let result = await db.exec(getsSql2, params);
 	        if (result && result.length >= 1) {
 	            response.json({
 	              code: 200,
-	              msg: "删除成功",
+	              msg: "查询成功",
 	              data: result,
 	              token: "createToken(result)"
 	            });
@@ -456,7 +591,7 @@ class AccountCountroller {
 	          response.json({
 	  			
 	            code: 200,
-	            msg: "删除失败",
+	            msg: "登录失败",
 	            data: result
 	          });
 	        }
@@ -478,13 +613,15 @@ class AccountCountroller {
 	        );
 	      }
 	    }
-	  
 	  //书架展示
 	  async shujiaSql(request, response, next) {
 	      let shujiaSql = " SELECT * FROM shujia where username=?; ";
 	      let params = [request.body.username];
 	      try {
 	        let result = await db.exec(shujiaSql, params);
+			for(var i = 0 ;i<result.length;i++){
+				result[i].bookimg =  fs.readFileSync(result[i].bookimg, 'base64');
+			}
 	        if (result && result.length >= 1) {
 	            response.json({
 	              code: 200,
@@ -520,10 +657,13 @@ class AccountCountroller {
 	    }
 	//传输后端数据到前端,book的各种信息
 	async getSql(request, response, next) {
-	    let getSql = " SELECT * FROM book; ";
+	    let getSql = " SELECT * FROM book where status='1'; ";
 	    let params = [];
 	    try {
 	      let result = await db.exec(getSql, params);
+				for(var j = 0 ;j<result.length;j++){
+					result[j].bookimg =  fs.readFileSync(result[j].bookimg, 'base64');
+				}
 	      if (result && result.length >= 1) {
 	          response.json({
 	            code: 200,
@@ -557,10 +697,50 @@ class AccountCountroller {
 	      );
 	    }
 	  }
+	  //传输后端数据到前端,某一本book的各种信息
+	  async getoneSql(request, response, next) {
+	      let getSql2 = " SELECT * FROM book where bookname=? and status='1'; ";
+	      let params = [request.body.bookname];
+	      try {
+	        let result = await db.exec(getSql2, params);
+			result[0].bookimg =  fs.readFileSync(result[0].bookimg, 'base64');
+	        if (result && result.length >= 1) {
+	            response.json({
+	              code: 200,
+	              msg: "查询成功",
+	              data: result,
+	              token: "createToken(result)"
+	            });
+	        } else {
+	          response.json({
+	  			
+	            code: 200,
+	            msg: "登录失败",
+	            data: result
+	          });
+	        }
+	      } catch (error) {
+	        //TODO handle the exception
+	        response.json({
+	          code: 200,
+	          msg: "服务器异常",
+	          error
+	        });
+	      }
+	      function createToken(data) {
+	        return jwt.encode(
+	          {
+	            exp: Date.now() + 1000 * 60 * 60 * 24,
+	            info: data
+	          },
+	          require("../config").tokenKey
+	        );
+	      }
+	    }
 		//传输后端数据到前端,fufenlei的各种信息
 		async getfufenleiSql(request, response, next) {
 			
-		    let fufenleiSql = " SELECT * FROM book where fufenlei= ?; ";
+		    let fufenleiSql = " SELECT * FROM book where fufenlei= ? and status='1'; ";
 		    let params = [request.body.fufenlei];
 		    try {
 		      let result = await db.exec(fufenleiSql, params);
@@ -599,11 +779,13 @@ class AccountCountroller {
 		  }
 			//传输后端数据到前端,zifenlei的各种信息
 			async zifenleiSql(request, response, next) {
-			    let zifenleiSql = " SELECT  * FROM book where zifenlei=?; ";
+			    let zifenleiSql = " SELECT  * FROM book where zifenlei=? and status='1'; ";
 			    let params = [request.body.zifenlei];
-					console.log('body',zifenleiSql)
 			    try {
 			      let result = await db.exec(zifenleiSql, params);
+				  for(var j = 0 ;j<result.length;j++){
+				  	result[j].bookimg =  fs.readFileSync(result[j].bookimg, 'base64');
+				  }
 			      if (result && result.length >= 1) {
 			          response.json({
 			            code: 200,
@@ -639,9 +821,8 @@ class AccountCountroller {
 			  }
 				//传输后端数据到前端,去重zifenlei的各种信息
 				async unizifenleiSql(request, response, next) {
-				    let onlyzifenleiSql = " SELECT distinct zifenlei FROM book where fufenlei=?;";
+				    let onlyzifenleiSql = " SELECT distinct zifenlei FROM book where fufenlei=? and status='1';";
 				    let params = [request.body.fufenlei];
-						console.log('body',onlyzifenleiSql)
 				    try {
 				      let result = await db.exec(onlyzifenleiSql, params);
 				      if (result && result.length >= 1) {
@@ -718,7 +899,7 @@ class AccountCountroller {
 		  }
 		
 	 async fufenleiSql(request, response, next) {
-	     let getSql = " SELECT distinct fufenlei FROM book; ";
+	     let getSql = " SELECT distinct fufenlei FROM book where status='1'; ";
 	     let params = [];
 	     try {
 	       let result = await db.exec(getSql, params);
