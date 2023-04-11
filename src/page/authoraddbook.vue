@@ -90,7 +90,7 @@ import axios from "axios";
     },
     methods: {
 		getadmin(){
-					this.LoginAuthor=this.$store.store.state.admin
+					this.LoginAuthor=this.$store.state.admin
 					},
 		 handleRemove(file) {
 		        console.log(file);
@@ -117,6 +117,7 @@ import axios from "axios";
 				console.log(this.bookimg)
         //解析图片
       },
+      // 提交信息
       onSubmit() {
         // console.log(this.form);
         axios({
@@ -151,6 +152,7 @@ import axios from "axios";
                 }
                     }).then(res => {
                         this.zifenleivalue = res.data.data
+                        console.log('11111'+res.data.data);
                             })
       }
           }

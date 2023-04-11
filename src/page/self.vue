@@ -2,7 +2,7 @@
 <div id="product">
 	<div class="self-header">
 		<div>
-			<img src="../assets/logo.jpg">
+			<img :src="imgurl" alt="" />
 			<p>个人中心</p>
 		</div>
 		<ul>
@@ -48,7 +48,7 @@
 		</div>
 		<div class="self-midbottom">
 			<div class="search">
-				<el-input class="ser" v-model="input2" clearable placeholder="输入作品名或作家" @blur="shujiashow"></el-input>
+				<el-input class="ser" v-model="input2" clearable placeholder="输入作品名" @blur="shujiashow"></el-input>
 				<div class="search2" @click="searchclick">搜书架</div>
 			</div>
 			<div class="shujialist">
@@ -148,6 +148,7 @@
 						  }).then(
 						    res => {
 						this.shujiamesg = res.data.data;
+						console.log('sssss',this.shujiamesg);
 						    },
 						    err => {
 						      console.log(err.msg);
@@ -164,8 +165,9 @@
 				        }
 				      }).then(
 				        res => {
+					console.log("this.mesg2::",res.data.data);
 						this.mesg2 = res.data.data;
-						this.mesg2[0].bookimg = 'data:image/jpg;base64,'+ this.mesg2[0].bookimg
+						// this.mesg2[0].bookimg = 'data:image/jpg;base64,'+ this.mesg2[0].bookimg
 						});
 				//章节获取
 				      axios({
@@ -188,7 +190,7 @@
 				      );
 			},
 			signout() {
-			  this.$store.store.commit('setData','');//更新userInfo
+			  this.$store.commit('setData','');//更新userInfo
 								 alert("退出成功")
 								 this.getuser()
 								 this.$router.push({
@@ -201,9 +203,10 @@
 				})
 			},
 			getuser(){
-					this.LoginUser=this.$store.store.state.user;
-					this.imgurl ='data:image/jpg;base64,'+this.$store.store.state.user.img;
+					this.LoginUser=this.$store.state.user;
+					this.imgurl =this.$store.state.user.img;
 			},
+			// 书架展示
 			shujiashow() {
 			      axios({
 			        method: "post",
@@ -216,7 +219,7 @@
 			        res => {
 					this.shujiamesg = res.data.data;
 					for(var i = 0 ;i<this.shujiamesg.length;i++){
-						this.shujiamesg[i].bookimg = 'data:image/jpg;base64,'+ this.shujiamesg[i].bookimg
+						this.shujiamesg[i].bookimg =this.shujiamesg[i].bookimg
 					}
 			        },
 			        err => {

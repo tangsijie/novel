@@ -87,6 +87,7 @@ export default {
 					name:'loginRegister'
 				})
 			},
+      //获取所有读者
       getreader(){
           axios({
 		         method: "post",
@@ -95,12 +96,12 @@ export default {
                         this.reader = res.data.data;
                             })
                  },
-          gosuperadmin(){
+      gosuperadmin(){
               this.$router.push({
                 path:'/superadmin'
               })
           },
-
+      //删除对应读者
           handleClick(e){
 						console.log(1)
                axios({

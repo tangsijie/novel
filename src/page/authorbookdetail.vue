@@ -1,13 +1,17 @@
 <template>
 <div>
-	
 	<div @click="goback" class="fh"><i class="el-icon-back"></i>返回</div>
   <div style="background:#f6f6f6;height:100%;padding:40px 0">
-      <el-button type="primary" icon="el-icon-edit" circle style="position:fixed;right:30px" @click="gowritebook"></el-button>
+      <el-button type="primary" icon="el-icon-edit" circle style="position:fixed;right:30px" @click="gowritebook">添加</el-button>
       <div style="background:#fff;width:80%;margin: 0 auto; padding:20px" >
-          <div style="margin-bottom:20px">{{this.bookmesg}}</div>
+          <div style="margin-bottom:20px">{{bookmesg}}</div>
           <div style="display:flex;flex-wrap:wrap;">
-              <div v-for="(item,index) in sections" :key="index" style="width:20%;margin:0 0 10px 0;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;" class="section" @click="dvalue(item)">{{item.zhangjieshu}} ： {{item.title}}</div>
+              <div v-for="(item,index) in sections" :key="index" 
+              style="width:20%;margin:0 0 10px 0;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;" 
+              class="section">
+              <p @click="dvalue(item)">{{item.zhangjieshu}} ： {{item.title}}</p>
+              <span @click="delArtice(item.id)">删除</span>
+              </div>
 		  </div>
             
       </div>
@@ -23,6 +27,7 @@ export default {
 		 detailvalue: false,
          bookmesg:'',
          sections:[],
+         id:''
      }
  },
  methods:{
@@ -63,6 +68,19 @@ export default {
                 bookname : this.bookmesg
              }
          })
+     },
+     delArtice(e){
+        axios({
+		         method: "post",
+	            url: "http://127.0.0.1:3000/author/delsection",
+                data:{
+                    id:e
+                }
+                    }).then(res => { 
+						console.log('res',res)
+                        alert('删除成功')
+                        this.getsections()
+                            })
      }
  },
 		mounted(){

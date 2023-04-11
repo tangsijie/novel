@@ -44,12 +44,27 @@ class AccountCountroller {
 
    //创建书本
    async createbook(request, response, next) {
-    let insertSql = " INSERT INTO book (bookname,writer,jieshao,fufenlei,zifenlei,bookimg) value (?,?,?,?,?,?); ";
-    let params = [request.body.bookname,request.body.writer,request.body.jieshao,request.body.fufenlei,request.body.zifenlei,request.body.bookimg];
+    function	timeFormat(t) {
+      return t<10?'0'+t:t
+    }
+  // 获取当前时间
+  function getTime() {
+    let time=new Date()
+    let year=time.getFullYear()
+    let Month=timeFormat(time.getMonth()+1)
+    let Day=timeFormat(time.getDate())
+    let h=timeFormat(time.getHours())
+    let m=timeFormat(time.getMinutes())
+    let s=timeFormat(time.getSeconds())
+    return `${year}-${Month}-${Day} ${h}:${m}:${s}`
+  }
+    let insertSql = " INSERT INTO book (bookname,writer,jieshao,fufenlei,zifenlei,bookimg,starttime) value (?,?,?,?,?,?,?); ";
+    let params = [request.body.bookname,request.body.writer,request.body.jieshao,request.body.fufenlei,request.body.zifenlei,request.body.bookimg,getTime()];
     try {
       let result = await db.exec(insertSql, params);
-      if (result && result.length >= 1) {
-        // console.log("访问服务器成功！"),
+      console.log("result:",result);
+      if (result && result.affectedRows >= 1) {
+        console.log("访问服务器成功！"),
           response.json({
             code: 200,
             msg: "插入成功",
@@ -198,8 +213,23 @@ class AccountCountroller {
 	}
 //增加书的章节
 async addsection(request, response, next) {
-  let insertSql = " INSERT INTO zhangjie(bookname,zhangjieshu,title,value) value (?,?,?,?); ";
-  let params = [request.body.bookname,request.body.zhangjieshu,request.body.title,request.body.value];
+  // 格式化时间-0
+  function	timeFormat(t) {
+    return t<10?'0'+t:t
+  }
+// 获取当前时间
+function getTime() {
+  let time=new Date()
+  let year=time.getFullYear()
+  let Month=timeFormat(time.getMonth()+1)
+  let Day=timeFormat(time.getDate())
+  let h=timeFormat(time.getHours())
+  let m=timeFormat(time.getMinutes())
+  let s=timeFormat(time.getSeconds())
+  return `${year}-${Month}-${Day} ${h}:${m}:${s}`
+}
+  let insertSql = " INSERT INTO zhangjie(bookname,zhangjieshu,title,value,time) value (?,?,?,?,?); ";
+  let params = [request.body.bookname,request.body.zhangjieshu,request.body.title,request.body.value,getTime()];
   try {
     let result = await db.exec(insertSql, params);
 	console.log('resd',result)
@@ -207,7 +237,7 @@ async addsection(request, response, next) {
       // console.log("访问服务器成功！"),
         response.json({
           code: 200,
-          msg: "查询成功",
+          msg: "添加成功",
           data: result,
           token: "createToken(result)"
         });
@@ -236,6 +266,46 @@ async addsection(request, response, next) {
     );
   }
   }
+  // 删除书的章节
+  async delsection(request, response, next) {
+    let delSql = " Delete from zhangjie where id=?; ";
+    let params = [request.body.id];
+    try {
+      let result = await db.exec(delSql, params);
+    console.log('resd',result)
+      if (result && result.length >= 1) {
+        // console.log("访问服务器成功！"),
+          response.json({
+            code: 200,
+            msg: "删除成功",
+            data: result,
+            token: "createToken(result)"
+          });
+      } else {
+        response.json({
+          code: 200,
+          msg: "删除失败l",
+          data: result
+        });
+      }
+    } catch (error) {
+      //TODO handle the exception
+      response.json({
+        code: 200,
+        msg: "服务器异常",
+        error
+      });
+    }
+    function createToken(data) {
+      return jwt.encode(
+        {
+          exp: Date.now() + 1000 * 60 * 60 * 24,
+          info: data
+        },
+        require("../config").tokenKey
+      );
+    }
+    }
   //更新书的章节
   async updatesection(request, response, next) {
     let insertSql = " UPDATE zhangjie SET zhangjieshu = ?,title=?,value=? where id=? ; ";

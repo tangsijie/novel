@@ -10,4 +10,6 @@ router.post("/getbooksections", author.getbooksections);
 router.post("/addsection", author.addsection);
 router.post("/delauthorbook", author.delauthorbook);
 router.post("/updatesection", author.updatesection);
+router.post("/delsection", author.delsection);
+
 module.exports = router;

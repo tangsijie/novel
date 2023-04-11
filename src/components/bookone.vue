@@ -3,7 +3,7 @@
 		<div class="topm">
 			<div class="topl">
 				<ul>
-					<li @click="home">凤凰小说</li>
+					<li @click="home">汤圆网小说</li>
 					<li>玄幻</li>
 					<li>都市</li>
 					<li>仙侠</li>
@@ -26,16 +26,16 @@
 				</el-input>
 				  <el-button icon="el-icon-search" circle style="position: relative; margin-left: -30px;"></el-button>
 				  <el-dropdown>
-				       <span class="el-dropdown-link" style="color: white;cursor: pointer;">
+				       <router-link to="/selfinfo" class="el-dropdown-link" style="color: white;cursor: pointer;">
 				         个人中心<i class="el-icon-arrow-down el-icon--right"></i>
-				       </span>
+				       </router-link>
 				       <el-dropdown-menu slot="dropdown">
 						   <div @click="gomybook"><el-dropdown-item icon="el-icon-plus" >我的书架</el-dropdown-item></div>
 				         <div @click="goselfinfo"><el-dropdown-item icon="el-icon-circle-plus">个人信息</el-dropdown-item></div>
 				         <div @click="gomesg"><el-dropdown-item icon="el-icon-circle-plus-outline">我的消息</el-dropdown-item></div>
 				       </el-dropdown-menu>
 				     </el-dropdown>
-				  	<div style="color: white;cursor: pointer;"@click="gomybook" @click.stop=""><i class="el-icon-reading" ></i>我的书架</div>
+				  	<div style="color: white;cursor: pointer;" @click="gomybook" @click.stop=""><i class="el-icon-reading" ></i>我的书架</div>
 			</div>
 		</div>
 	</div>
@@ -48,7 +48,7 @@
 			  data(){
 			        return {
 			         input: '',
-					 LoginUser:this.$store.store.state.user,
+					 LoginUser:this.$store.state.user,
 			        };
 			      },
 			      methods: {

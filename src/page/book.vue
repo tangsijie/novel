@@ -36,7 +36,7 @@
 			<div  id="code" v-show="isshow" style="display:block; position: absolute;right: 208px;top: -30px;background-color:white;width:180px;height: 200px;">
 				<div>
 					<div>
-						<p style="border-top:1px solid black;position: absolute;bottom: 130px;left: 50px;padding-top: 10px;">凤凰公众号</p>
+						<p style="border-top:1px solid black;position: absolute;bottom: 130px;left: 50px;padding-top: 10px;">汤圆公众号</p>
 						<div style="position: absolute;width:113px;height:113px;bottom: 0px;left: 35px; background-image: url(../../static/img/code-wx.png);background-size: 100%;" ></div>
 					</div>
 				</div>
@@ -151,7 +151,7 @@
 				</el-tab-pane>
 			    <el-tab-pane label="目录" name="second">
 				<div class="tabwrap">
-					<h3>翻红之路-共{{zhangjie.length}}章<span>免费</span></h3>
+					<h3>{{getBook.bookname}}-共{{zhangjie.length}}章<span>免费</span></h3>
 					<ul>
 						<li v-for="(item,index) in zhangjie" :key="index">
 							{{item.zhangjieshu}}&nbsp;{{item.title}}
@@ -179,7 +179,7 @@
 				tuijianshowmesg:[],
 				isaddtuijianmesg:[],
 				isaddshujiamesg:[],
-				getBook:[],
+				getBook:{},
 				isadd:true,
 				isaddtui:true,
 				box:false,
@@ -195,6 +195,7 @@
 		},
 		methods:{
 			changebg(){
+				// console.log(bg1);
 				if(this.bg1==true){
 					this.bg1=false;
 					this.bg2=true;
@@ -207,14 +208,18 @@
 			},
 			// 获取用户数据
 			getuserdata(){
-				this.LoginUser=this.$store.store.state.user;
+				this.LoginUser=this.$store.state.user;
 				//加载方法顺序
 				this.getbookdata();
 			},
 			//获取点的具体书本信息
 			getbookdata(){
-			 this.getBook=this.$route.params.book;
-			 	// this.getBook[0].bookimg = 'data:image/jpg;base64,'+ this.getBook[0].bookimg;
+				if(this.$route.params.book){
+					this.getBook=this.$route.params.book;
+				}else{
+					this.getBook=this.$store.state.book
+				}
+			 console.log("getBook:",this.getBook);
 			 this.shujiashow();
 			},
 			//书架表展示
@@ -241,7 +246,7 @@
 			        method: "post",
 			        url: "http://127.0.0.1:3000/getSql/zhangjieSql",
 			        data: {
-						bookname:this.getBook.bookname
+						  bookname:this.getBook.bookname
 			        }
 			      }).then(
 			        res => {
@@ -532,6 +537,10 @@
 						zhangjiemesg:this.zhangjie,
 					}
 				});
+				this.$store.commit('setbookdetail',{
+					detailmesg:this.getBook,
+						zhangjiemesg:this.zhangjie,
+				})
 			},
 		// gofenlei(){
 		// 	console.log('gofenlei',this.getBook)
@@ -814,7 +823,7 @@
 		width: 100%;
 	}
 	.divlab:nth-child(2){
-		border-bottom:1px solid #e6e6e61px solid #e6e6e6 ;
+		border-bottom:1px solid #e6e6e6;
 		border-top: 1px solid #e6e6e6;
 	}
 	.cont2-left>p{

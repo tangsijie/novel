@@ -68,9 +68,9 @@ export default {
     },
 
     // 点击跳转
-    // jumpPath(keyword) {
-    //   this.$router.push(`/search?keyword=${keyword}`);
-    // },
+    jumpPath(keyword) {
+      this.$router.push(`/search?keyword=${keyword}`);
+    },
   },
 };
 </script>

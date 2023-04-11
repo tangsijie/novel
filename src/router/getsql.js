@@ -5,6 +5,7 @@ let getsql = require("../mysql/controller/getsql")
 router.post("/getSql", getsql.getSql);//接口路径
 router.post("/fufenleiSql", getsql.fufenleiSql);
 router.post("/zhangjieSql", getsql.zhangjieSql);
+router.post("/whichzhangjieSql", getsql.whichzhangjieSql);
 router.post("/updateSql", getsql.updateSql);
 router.post("/updatemimaSql", getsql.updatemimaSql);
 router.post("/shujiaSql", getsql.shujiaSql);

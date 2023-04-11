@@ -1,0 +1,267 @@
+var ywRiskVerify = function() {
+  var _params = {
+    maskOpacity: 50,
+    env: '',
+  },
+  
+  _url = "https://aq.qidian.com/mobile/phoneverify?",
+  _width = 360, // 宽度
+  _height = 360, // 高度
+  _tencentCaptchaAppId = 2068745475,
+  _iframeDiv = null, // 嵌套iframe的div
+  _maskDiv = null, // 遮罩层
+  _iframeUrl = "", // iframe的链接地址
+  _events = {}, // callback事件
+  
+  _init = function() {
+    
+    _initListener();
+    _loadJS('https://static.geetest.com/static/tools/gt.js');
+    _loadJS('https://ssl.captcha.qq.com/TCaptcha.js');
+  },
+
+  _setParam = function(key, value) {
+    _params[key] = value;
+  },
+
+  _setParams = function(_p) {
+    for (var _key in _p) {
+      _params[_key] = _p[_key];
+    }
+  },
+  
+  _addIframe = function(_url, _divObj) {
+    if (_params.env == 'oa') {
+      _url = _url.replace('https://aq', 'https://oaaq');
+    }
+    if (_divObj) _iframeDiv = _divObj;
+    else _iframeDiv = document.getElementById("div_yw_risk_verify");
+    
+    if (_iframeDiv == null) {
+      _iframeDiv = document.createElement("div"),
+      document.body.appendChild(_iframeDiv);
+      
+      var _style = "left:0;" +
+                   "top:0;" +
+                   "border: 1px solid #d9d9d9; border-radius: 20px;" +
+                   "width:100%;" +
+                   "height:100%;" +
+                   "position:fixed;" +
+                   "z-index:99999;" +
+                   "background:none;" +
+                   "_position:absolute;" +
+                   "_top:0;" +
+                   "_margin-top:0px;";
+      _iframeDiv.style.cssText = _style;
+      _iframeDiv.id = "div_yw_risk_verify";
+    }
+    _iframeDiv.innerHTML = '<iframe name="ui_yw_risk_verify" id="ui_yw_risk_verify" allowtransparency="true" scrolling="no" frameborder="0" width="100%" height="100%" style="top:0; left:0; ' + (_params.borderRadius ? "border-radius:" + _params.borderRadius + "px;" : "") + '" src="' + _url + '" />';
+  },
+  
+  _dragIframe = function(_w, _h) {
+    _iframeDiv && _w > 1 && _h > 1 && (_width != _w || _height != _h) && ("function" == typeof _events.resize ?
+      _events.resize(parseInt(_w), parseInt(_h)):
+      (
+        _iframeDiv.style.width = _w + "px",
+        _iframeDiv.style.height = _h + "px",
+        _iframeDiv.style.marginLeft = (document.documentElement.clientWidth-_w)/2 + "px",
+        _iframeDiv.style.marginTop = (document.documentElement.clientHeight-_h)/2 + "px"
+      )
+    ),
+    _width = _w,
+    _height = _h;
+  },
+  
+  _close = function() {
+    _iframeDiv.style.display = "none",
+    _maskDiv && (_maskDiv.style.display = "none")
+  },
+  
+  _initListener = function () {
+    var e = this;
+    window.addEventListener('message',function(e) {
+        if (e && e.data == 'closeWeb') {
+            _close();
+            "function" == typeof _events.verifyFail && _events.verifyFail()
+            return;
+        }
+        if (e && e.data == 'verifySuccess') {
+            _close();
+            "function" == typeof _events.verifySuccess && _events.verifySuccess()
+            return;
+        }
+    });
+  },
+  
+  _loadJS = function (jsUrl) {
+    var script = document.createElement('script');
+        script.type = 'text/javascript',
+        script.src = jsUrl;
+        document.getElementsByTagName('head')[0].appendChild(script);
+  },
+  
+  _setOpacity = function() {
+    var _opacity = _params.maskOpacity;
+    _maskDiv = document.getElementById("div_ywmask");
+    if (0 != _opacity) {
+        if (_maskDiv == null) {
+            var _style = "background-color:#000;overflow:hidden;position:fixed;left:0;top:0;width:100%;height:100%;z-index:99998;opacity:" + _opacity/100 + ";filter:alpha(opacity=" + _opacity + ");";
+            _style += "_position:absolute;_height:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight));_width:expression(eval(document.documentElement.scrollLeft+document.documentElement.clientWidth));",
+            _maskDiv = document.createElement("div"),
+            _maskDiv.style.cssText = _style,
+            _maskDiv.id = "div_ywmask";
+            document.body.appendChild(_maskDiv);
+        }
+        _maskDiv.style.display = "block";
+    }
+  },
+  
+  _showGeetest = function() {
+    try {
+      var geetestDiv = document.getElementById("div_geetest");
+      if (geetestDiv == null) {
+        geetestDiv = document.createElement("div")
+        geetestDiv.id = 'div_geetest';
+        document.body.appendChild(geetestDiv);
+        var btn = "<input type=\"button\" value=\"\" id=\"btnGeetest\" style=\"display: none;\">";
+        geetestDiv.innerHTML = btn;
+      }
+      
+      initGeetest({
+        gt: _params.gt,
+        challenge: _params.challenge,
+        offline: _params.offline,
+        new_captcha: _params.newCaptcha,
+        timeout: '5000',
+        product: "bind", // 产品形式，包括：float，popup
+        next_width: "360px",
+      }, function (captchaObj) {
+        captchaObj.appendTo("body");
+        captchaObj.onReady(function(){
+          var fn = function(e) {
+			captchaObj.verify(); //显示验证码
+		  };
+
+          var btn = "<input type=\"button\" value=\"\" id=\"btnGeetest\" style=\"display: none;\">";
+          document.getElementById("div_geetest").innerHTML = btn;
+		  var btnGeetest = document.getElementById("btnGeetest");
+		  btnGeetest.addEventListener('click', fn);
+          setTimeout(function() { document.getElementById("btnGeetest").click(); }, 200);
+        }).onSuccess(function(data){
+          var result = captchaObj.getValidate();
+          result.challenge = result.geetest_challenge;
+          result.seccode = result.geetest_seccode;
+          result.validate = result.geetest_validate;
+          
+          if (result.seccode) {
+            if (typeof _events.verifySuccess == 'function') {
+              _events.verifySuccess(result);
+            }
+          } else {
+            if (typeof _events.verifyFail == 'function') {
+              _events.verifyFail(result);
+            }
+          }
+        }).onError(function(error){
+          /**if (typeof _events.verifyFail == 'function') {
+            _events.verifyFail(error);
+          }*/
+        }).onClose(function(res){
+          if (typeof _events.verifyFail == 'function') {
+            try {
+              _events.verifyFail({});
+            } catch (e) {
+              console.log(e);
+            }
+          }
+        });
+        
+      });
+    } catch (e) {
+      if (typeof _events.verifyFail == 'function') {
+        _events.verifyFail(e);
+      }
+      console.log(e);
+    }
+  },
+  
+  _showTCapt = function(_params) {
+    var fn = function (res) {
+        if (res.ret === 0) {
+            if (typeof _events.verifySuccess == 'function') {
+                _events.verifySuccess(res);
+            }
+        } else {
+            if (typeof _events.verifyFail == 'function') {
+                _events.verifyFail(res);
+            }
+        }
+    }
+    
+    try {
+        var captchaBox = document.getElementById('captchaBox');
+        if (!captchaBox) {
+            captchaBox = document.createElement("div"),
+            captchaBox.id = "captchaBox",
+            document.body.appendChild(captchaBox);
+        }
+        // 默认为false，如果传入参数，则按照传入参数
+        var needFeedBack = _params.needFeedBack == undefined ? false : (_params.needFeedBack ? true : false);
+        var options = {
+            needFeedBack: needFeedBack,
+        };
+        var captObj = new TencentCaptcha(document.getElementById('captchaBox'), _params.captchaAId || _tencentCaptchaAppId, fn, options);
+        setTimeout(function() { captObj.show(); }, 100);
+    } catch (e) {
+        console.log(e);
+    }
+  },
+  
+  _verify = function(params, verifySuccess, verifyFail) {
+    
+    _events.verifySuccess = verifySuccess; // 设置成功回调事件
+    _events.verifyFail = verifyFail; // 设置成功回调事件
+    
+    var url = _url;
+    if (params) {
+      _setParams(params);
+    }
+    
+    if (_params.banId != 2 && _params.banId != 3) {
+      if (typeof verifyFail == 'function') {
+        verifyFail({code: -1, 'message': '风控阻断'});
+      }
+    }
+    
+    if (_params.banId == 2 && _params.captchaType == 0) {
+        // 出腾讯滑动验证码
+        _showTCapt(_params);
+        return;
+    }
+    
+    if (_params.banId == 2 &&_params.captchaType == 1) {
+        // 极验
+        _showGeetest();
+        return;
+    }
+    
+    // 出短信验证码
+    // areaId=1&sessionkey=2f6761ed79ca4b76b24e846bf3a1597a300215579&appId=10&from=h5
+    for(var key in _params) {
+      url += key + '=' + _params[key] + '&';
+    }
+    _iframeUrl ? document.getElementById("ui_yw_risk_verify").src = url : (
+      _addIframe(url)
+    ),
+    _dragIframe(_width - 1, _height - 1),
+    _setOpacity(),
+    _iframeDiv.style.display = "block";
+  };
+
+  return _init(), {
+    setParam: _setParam,
+    setParams: _setParams,
+    close: _close,
+    verify: _verify // 验证方法，根据传入的类型，调相应的腾讯验证码，极验验证码，短信验证码
+  }
+}();

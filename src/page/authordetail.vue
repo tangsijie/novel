@@ -9,7 +9,7 @@
 	   <div class="tuichu" @click="gosy" @click.stop=""><i class="el-icon-loading" style="right:130px;top: 30px;"></i></div>
 	   <p style="position:fixed;right:145px;top: 50px;cursor: pointer;" @click="gosy">退出</p>
 	   
-      <el-button type="primary" icon="el-icon-edit" circle style="position:fixed;right:30px" @click="goaddbook"></el-button>
+      <el-button type="primary" icon="el-icon-edit" circle style="position:fixed;right:30px" @click="goaddbook">添加书籍</el-button>
       <div style="display:flex; justify-content:space-around;flex-wrap:wrap">
 		  <div  v-for="(item,index) in allbook" :key="index" style="margin-bottom:20px;cursor: pointer;" @click="gobookdetail(item.bookname)">
           <el-card class="box-card" >
@@ -21,7 +21,7 @@
               <div class="biaoqian" style="margin:20px 0 0 0">
                  <span>{{item.fufenlei}}</span>
                  <span>{{item.zifenlei}}</span>
-                 <span>{{item.biaoqian}}</span>
+                 <!-- <span>{{item.biaoqian}}</span> -->
                  <span>{{item.starttime.substring(0,10)}}</span>
            </div>
           </el-card>
@@ -37,7 +37,7 @@ export default {
     data(){
         return{
              activeNames: ['1'],
-             LoginAuthor:[],
+             LoginAuthor:{},
              allbook:[],
 			 box:false,
         }
@@ -50,6 +50,7 @@ export default {
 				name:'loginRegister'
 			})
 		},
+    //删除书籍
 		delbook(e){
 			
 				   axios({
@@ -86,10 +87,14 @@ export default {
             this.activeNames = val
       },
       getadmin(){
-				this.LoginAuthor=this.$store.store.state.admin
+        console.log('this.$store.state.admin:',this.$store.state.admin);
+				this.LoginAuthor=this.$store.state.admin
+        console.log('LoginAutho:',this.LoginAuthor);
 				this.getauthorbook();
 			},
       getauthorbook(){
+        console.log('LoginAutho11121:',this.LoginAuthor);
+        
           axios({
 		         method: "post",
 	            url: "http://127.0.0.1:3000/author/getauthorbook",
@@ -108,11 +113,15 @@ export default {
         )
       },
       gobookdetail(item){
+        window.localStorage.setItem('bookname',item)
         this.$router.push({
           name:'authorbookdetail',
           params:{bookname:item}
         })
       }
+    },
+    created(){
+      this.getadmin()
     },
 		mounted(){
 			this.getadmin()

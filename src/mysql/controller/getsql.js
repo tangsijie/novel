@@ -5,11 +5,26 @@ const jwt = require("jwt-simple");
 class AccountCountroller {
 //评论
 	async addcommentSql(request, response, next) {
+			// 格式化时间-0
+			function	timeFormat(t) {
+				return t<10?'0'+t:t
+			}
+		// 获取当前时间
+	  function getTime() {
+			let time=new Date()
+			let year=time.getFullYear()
+			let Month=timeFormat(time.getMonth()+1)
+			let Day=timeFormat(time.getDate())
+			let h=timeFormat(time.getHours())
+			let m=timeFormat(time.getMinutes())
+			let s=timeFormat(time.getSeconds())
+			return `${year}-${Month}-${Day} ${h}:${m}:${s}`
+		}
 		let comimg = "SELECT img  FROM reader where rname=? ; ";
 		let params2 = [request.body.username];
 		let result2 = await db.exec(comimg, params2);
-	    let comSql = " INSERT INTO message(username,img,value,bookname)VALUE(?,?,?,?);";
-	    let params = [request.body.username,result2[0].img,request.body.value,request.body.bookname];
+	    let comSql = " INSERT INTO message(username,img,value,bookname,time)VALUE(?,?,?,?,?);";
+	    let params = [request.body.username,result2[0].img,request.body.value,request.body.bookname,getTime()];
 	    try {
 	      let result = await db.exec(comSql, params);
 		  
@@ -52,9 +67,9 @@ class AccountCountroller {
 		    let params = [request.body.bookname];
 		    try {
 		      let result = await db.exec(comshowSql, params);
-			  for(var i = 0 ;i<result.length;i++){
-			  	result[i].img =  fs.readFileSync(result[i].img, 'base64');
-			  }
+			  // for(var i = 0 ;i<result.length;i++){
+			  // 	result[i].img =  fs.readFileSync(result[i].img, 'base64');
+			  // }
 		      if (result && result.length >= 1) {
 		          response.json({
 		            code: 200,
@@ -66,7 +81,7 @@ class AccountCountroller {
 		        response.json({
 					
 		          code: 200,
-		          msg: "登录失败",
+		          msg: "展示失败",
 		          data: result
 		        });
 		      }
@@ -133,9 +148,7 @@ class AccountCountroller {
 			    let params = [request.body.id];
 					  let p=request.body.id;
 			    try {
-						for(var i = 0 ;i<p.length;i++){
-							let result = await db.exec(mycommentSql2, p[i]);
-						}
+							let result = await db.exec(mycommentSql2, p);
 			    if (result && result.length >= 1) {
 			        response.json({
 			          code: 200,
@@ -345,7 +358,7 @@ class AccountCountroller {
 	        } else {
 	          response.json({
 	            code: 200,
-	            msg: "加入书架失败",
+	            msg: "推荐失败",
 	            data: result
 	          });
 	  		
@@ -488,14 +501,31 @@ class AccountCountroller {
 		      );
 		    }
 		  }
+			
 	  //加入书架
 	  async addshujiaSql(request, response, next) {
+			// 格式化时间-0
+		function	timeFormat(t) {
+				return t<10?'0'+t:t
+			}
+		// 获取当前时间
+	  function getTime() {
+			let time=new Date()
+			let year=time.getFullYear()
+			let Month=timeFormat(time.getMonth()+1)
+			let Day=timeFormat(time.getDate())
+			let h=timeFormat(time.getHours())
+			let m=timeFormat(time.getMinutes())
+			let s=timeFormat(time.getSeconds())
+			return `${year}-${Month}-${Day} ${h}:${m}:${s}`
+		}
+			console.log("this.getTime():",getTime());
 		  let comimg2 = "SELECT bookimg  FROM book where bookname=? and status='1'; ";
 		  let params2 = [request.body.bookname];
 		  let result2 = await db.exec(comimg2, params2);
-		 
+
 	      let addshujiaSql = " INSERT INTO shujia(bookimg,username,bookname,status,fenlei,zhangjie,title,time,writer)VALUE(?,?,?,?,?,?,?,?,?);";
-	      let params = [result2[0].bookimg,request.body.username,request.body.bookname,request.body.status,request.body.fenlei,request.body.zhangjie,request.body.title,request.body.time,request.body.writer];
+	      let params = [result2[0].bookimg,request.body.username,request.body.bookname,request.body.status,request.body.fenlei,request.body.zhangjie,request.body.title,getTime(),request.body.writer];
 	      try {
 	        let result = await db.exec(addshujiaSql, params);
 	        if (result && result.affectedRows >= 1) {
@@ -619,9 +649,9 @@ class AccountCountroller {
 	      let params = [request.body.username];
 	      try {
 	        let result = await db.exec(shujiaSql, params);
-			for(var i = 0 ;i<result.length;i++){
-				result[i].bookimg =  fs.readFileSync(result[i].bookimg, 'base64');
-			}
+			// for(var i = 0 ;i<result.length;i++){
+			// 	result[i].bookimg =  fs.readFileSync(result[i].bookimg, 'base64');
+			// }
 	        if (result && result.length >= 1) {
 	            response.json({
 	              code: 200,
@@ -633,7 +663,7 @@ class AccountCountroller {
 	          response.json({
 	  			
 	            code: 200,
-	            msg: "登录失败",
+	            msg: "查询失败",
 	            data: result
 	          });
 	        }
@@ -661,9 +691,11 @@ class AccountCountroller {
 	    let params = [];
 	    try {
 	      let result = await db.exec(getSql, params);
-				for(var j = 0 ;j<result.length;j++){
-					result[j].bookimg =  fs.readFileSync(result[j].bookimg, 'base64');
-				}
+				console.log('result:',result)
+				// for(let j = 0 ;j<result.length;j++){
+				// 	result[j].bookimg =  fs.readFileSync(result[j].bookimg, 'base64');
+				// }
+				console.log('result2222:',result)
 	      if (result && result.length >= 1) {
 	          response.json({
 	            code: 200,
@@ -675,7 +707,7 @@ class AccountCountroller {
 	        response.json({
 				
 	          code: 200,
-	          msg: "登录失败",
+	          msg: "查询失败",
 	          data: result
 	        });
 	      }
@@ -703,7 +735,7 @@ class AccountCountroller {
 	      let params = [request.body.bookname];
 	      try {
 	        let result = await db.exec(getSql2, params);
-			result[0].bookimg =  fs.readFileSync(result[0].bookimg, 'base64');
+			// result[0].bookimg =  fs.readFileSync(result[0].bookimg, 'base64');
 	        if (result && result.length >= 1) {
 	            response.json({
 	              code: 200,
@@ -797,7 +829,7 @@ class AccountCountroller {
 			        response.json({
 						
 			          code: 200,
-			          msg: "登录失败",
+			          msg: "查询失败",
 			          data: result
 			        });
 			      }
@@ -875,7 +907,7 @@ class AccountCountroller {
 		        response.json({
 					
 		          code: 200,
-		          msg: "登录失败",
+		          msg: "查询失败",
 		          data: result
 		        });
 		      }
@@ -897,7 +929,46 @@ class AccountCountroller {
 		      );
 		    }
 		  }
-		
+		// 获取对应章节内容
+		async whichzhangjieSql(request, response, next) {
+			let getSql = " SELECT * FROM zhangjie where bookname=? and title=? and id=?; ";
+			let params = [request.body.bookname,request.body.title,request.body.id];
+			try {
+				let result = await db.exec(getSql, params);
+				if (result && result.length >= 1) {
+						response.json({
+							code: 200,
+							msg: "查询成功",
+							data: result,
+							token: "createToken(result)"
+						});
+				} else {
+					response.json({
+				
+						code: 200,
+						msg: "查询失败",
+						data: result
+					});
+				}
+			} catch (error) {
+				//TODO handle the exception
+				response.json({
+					code: 200,
+					msg: "服务器异常",
+					error
+				});
+			}
+			function createToken(data) {
+				return jwt.encode(
+					{
+						exp: Date.now() + 1000 * 60 * 60 * 24,
+						info: data
+					},
+					require("../config").tokenKey
+				);
+			}
+		}
+
 	 async fufenleiSql(request, response, next) {
 	     let getSql = " SELECT distinct fufenlei FROM book where status='1'; ";
 	     let params = [];

@@ -1,5 +1,6 @@
 const express = require("express");
 const server = express();
+ 
 //引入中间件
 // server.use(badyParser.urlencoded({extended:false}));
 // server.use(express.json());
@@ -17,7 +18,7 @@ server.all("*", (req, res, next) => {
   res.header("Access-Control-Allow-Credentials", true); //可以带cookies
   res.header("X-Powered-By", "3.2.1");
   res.header("Cache-Control", "public,max-age=60000");
-  // 任何请求之前有一个预请求，预请求后无其他回调处理，其他请求要进入下一个回调
+  // 任何之前有一个预请求，预请求后无其他回调处理，其他请求要进入下一个回调
   if (req.method === "OPTIONS") {
     res.sendStatus(200);
   } else {
@@ -30,6 +31,7 @@ server.use("/getSql", require("../router/getsql.js"));//路由路径
 server.use("/admin", require("../router/admin.js"));
 server.use("/author", require("../router/author.js"));
 server.use("/uploadImg", require("../router/upload.js"));
+
 server.listen(3000, () => {
   console.log("服务器启动成功！");
 });

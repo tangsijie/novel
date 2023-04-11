@@ -8,7 +8,9 @@
     </div>
     
     <div id="context" style="width:80%;margin:auto"></div>
-    <div style="display:flex;justify-content:center;margin-top:10px" ><el-button type="primary" @click="fabu">发布</el-button></div>
+    <div style="display:flex;justify-content:center;margin-top:10px" >
+      <el-button type="primary" @click="fabu">发布</el-button>
+    </div>
   </div>
 </template>
 

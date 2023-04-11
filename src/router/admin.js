@@ -8,9 +8,11 @@ router.post("/getauthor", admin.getauthor);
 router.post("/getauthorwork", admin.getauthorwork);
 router.post("/deleteauthor", admin.deleteauthor);
 router.post("/deletebook", admin.deletebook);
-// router.post("/getadmin", admin.getadmin);
-// router.post("/deleteadmin", admin.deleteadmin);
-// router.post("/addadmin", admin.addadmin);
+router.post("/deleteadmin", admin.deleteadmin);
+
+router.post("/getadmin", admin.getadmin);
+router.post("/addadmin", admin.addadmin);
+
 router.post("/updateshSql", admin.updateshSql);
 router.post("/getshbook", admin.getshbook);
 

@@ -18,8 +18,10 @@ import writebook from '../page/writebook.vue'
 import authoraddbook from '../page/authoraddbook.vue'
 import authordetail from '../page/authordetail.vue'
 import authorbookdetail from '../page/authorbookdetail.vue'
-import editbook from '../page/editbook.vue'
-import message from '../page/message.vue'
+import editbook from '../page/editbook'
+import message from '../page/message'
+// import renull from '../page/renull
+import allbook from '../page/allbook'
 
 Vue.use(Router)
 
@@ -30,13 +32,18 @@ export default new Router({
 	    name: 'gohome',
 	    component: gohome//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 	  },
+		{
+      path: '/book',//页面的一个路径，书籍详细
+      name: 'book',
+      component:book//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+    },
     {
       path: '/home/:book/:passfenlei',//页面的一个路径
       name: 'home',
       component: home//申明你现在的这个路径是导向哪一个文件也就是页面的含义
     },
 		{
-		  path: '/loginRegister',//页面的一个路径
+		  path: '/loginRegister',//页面的一个路径,登录注册页面
 		  name: 'loginRegister',
 		  component: loginRegister//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
@@ -44,6 +51,11 @@ export default new Router({
 		  path:'/book/:detailmesg/:zhangjiemesg',//页面的一个路径
 		  name:'book',
 		  component:book//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+		},
+		{
+		  path:'/self',//页面的一个路径
+		  name:'self',
+		  component:self//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
 		  path:'/book/detail',//页面的一个路径
@@ -56,42 +68,47 @@ export default new Router({
 		  component:self//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
-		  path:'/selfinfo',//页面的一个路径
+		  path:'/selfinfo',//页面的一个路径，个人中心
 		  name:'selfinfo',
 		  component:selfinfo//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
-		  path:'/renull',//页面的一个路径
-		  name:'renull',
-		  component:renull//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+		  path:'/fenlei',//页面的一个路径
+		  name:'fenlei',
+		  component:fenlei//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
+		{
+			path:'/allbook',//页面的一个路径
+			name:'allbook',
+			component:allbook//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+		  },
 		{
 		  path:'/fenlei/:detailmesg/:zhangjiemesg',//页面的一个路径
 		  name:'fenlei',
 		  component:fenlei//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
-			path:'/admin',//页面的一个路径
+			path:'/admin',//页面的一个路径，管理员
 			name:'admin',
 			component:admin//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
-			path:'/authorAdmin',//页面的一个路径
+			path:'/authorAdmin',//页面的一个路径，作者管理
 			name:'authorAdmin',
 			component:authorAdmin//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
-			path:'/superadmin',//页面的一个路径
+			path:'/superadmin',//页面的一个路径，审核小说
 			name:'superadmin',
 			component:superadmin//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
-			path:'/writebook',//页面的一个路径
+			path:'/writebook',//页面的一个路径，作者写小说
 			name:'writebook',
 			component:writebook//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
-			path:'/authoraddbook',//页面的一个路径
+			path:'/authoraddbook',//页面的一个路径，作者添加书本
 			name:'authoraddbook',
 			component:authoraddbook//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
@@ -100,6 +117,7 @@ export default new Router({
 			name:'authordetail',
 			component:authordetail//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
+	
 		{
 			path:'/authorbookdetail/:bookname/:zhangjiemesg',//页面的一个路径
 			name:'authorbookdetail',

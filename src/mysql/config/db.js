@@ -1,5 +1,5 @@
 const mysql=require('mysql');
-const conn=mysql.createdConnection(config:{
+const conn=mysql.createdConnection(config,{
 	host:"localhost",
 	user:"root",
 	password:"123456",

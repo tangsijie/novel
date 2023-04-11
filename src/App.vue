@@ -1,28 +1,28 @@
 <template>
   <div id="app">
-    
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-	import axios from "axios";
+import axios from "axios";
 export default {
-  name: 'App'
-}
+  name: "App",
+ 
+};
 </script>
 
 <style>
-	
-*{
-	padding:0;
-	margin: 0;
-	list-style: none;
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
-body,html{
+body,
+html {
   height: 100%;
 }
-#app{
+#app {
   height: 100%;
 }
 </style>

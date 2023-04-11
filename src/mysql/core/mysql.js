@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql')
 
 const pool = mysql.createPool(require("../config/index.js").dev);
 pool.on('connection', (connection) => {
