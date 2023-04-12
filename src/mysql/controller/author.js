@@ -62,9 +62,9 @@ class AccountCountroller {
     let params = [request.body.bookname,request.body.writer,request.body.jieshao,request.body.fufenlei,request.body.zifenlei,request.body.bookimg,getTime()];
     try {
       let result = await db.exec(insertSql, params);
-      console.log("result:",result);
+      // console.log("result:",result);
       if (result && result.affectedRows >= 1) {
-        console.log("访问服务器成功！"),
+        // console.log("访问服务器成功！"),
           response.json({
             code: 200,
             msg: "插入成功",
@@ -232,7 +232,7 @@ function getTime() {
   let params = [request.body.bookname,request.body.zhangjieshu,request.body.title,request.body.value,getTime()];
   try {
     let result = await db.exec(insertSql, params);
-	console.log('resd',result)
+	// console.log('resd',result)
     if (result && result.length >= 1) {
       // console.log("访问服务器成功！"),
         response.json({
@@ -272,7 +272,7 @@ function getTime() {
     let params = [request.body.id];
     try {
       let result = await db.exec(delSql, params);
-    console.log('resd',result)
+    // console.log('resd',result)
       if (result && result.length >= 1) {
         // console.log("访问服务器成功！"),
           response.json({
@@ -312,7 +312,7 @@ function getTime() {
     let params = [request.body.zhangjieshu,request.body.title,request.body.value,request.body.id];
     try {
       let result = await db.exec(insertSql, params);
-  	console.log('resd',result)
+  	// console.log('resd',result)
       if (result && result.length >= 1) {
         // console.log("访问服务器成功！"),
           response.json({

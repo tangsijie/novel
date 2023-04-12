@@ -1,7 +1,9 @@
 const db = require("../core/mysql.js");
 const moment = require("moment");
 const jwt = require("jwt-simple");
+
 class AccountCountroller {
+  // 查询所有读者
 async getreader(request, response, next) {
     let getrdSql = " SELECT * FROM reader; ";
     let params = [];
@@ -40,6 +42,7 @@ async getreader(request, response, next) {
       );
     }
   }
+  // 删除读者
   async deletereader(request, response, next) {
     let delrdSql = "DELETE FROM reader WHERE readerid = ?;";
     let params = [request.body.readerid];
@@ -116,6 +119,7 @@ async getreader(request, response, next) {
   }
   //从admin接受的作者名，以此查询他的作品
   async getauthorwork(request, response, next) {
+    // console.log(456);
     let getatwSql = " SELECT * FROM book WHERE writer = ? and status='1'; ";
     let params = [request.body.writer];
     try {
@@ -419,6 +423,47 @@ async getreader(request, response, next) {
 	      );
 	    }
 	  }
+ //更新书的介绍
+ async updatebook(request, response, next) {
+  let insertSql = " UPDATE book SET bookname = ?,jieshao=?,fufenlei=? ,zifenlei=? where id=?;  ";
+  let params = [request.body.bookname,request.body.jieshao,request.body.fufenlei,request.body.zifenlei,request.body.id];
+  // console.log(request,123);
+  try {
+    let result = await db.exec(insertSql, params);
+  // console.log('resd',result)
+    if (result && result.length >= 1) {
+      // console.log("访问服务器成功！"),
+        response.json({
+          code: 200,
+          msg: "更新书籍成功",
+          data: result,
+          token: "createToken(result)"
+        });
+    } else {
+      response.json({
+        code: 200,
+        msg: "更新书籍失败",
+        data: result
+      });
+    }
+  } catch (error) {
+    //TODO handle the exception
+    response.json({
+      code: 200,
+      msg: "服务器异常",
+      error
+    });
+  }
+  function createToken(data) {
+    return jwt.encode(
+      {
+        exp: Date.now() + 1000 * 60 * 60 * 24,
+        info: data
+      },
+      require("../config").tokenKey
+    );
+  }
+  }
 
   
 }

@@ -22,7 +22,7 @@ import editbook from '../page/editbook'
 import message from '../page/message'
 // import renull from '../page/renull
 import allbook from '../page/allbook'
-
+import adminupdatebook from '../page/adminupdatebook'
 Vue.use(Router)
 
 export default new Router({
@@ -91,6 +91,11 @@ export default new Router({
 			path:'/admin',//页面的一个路径，管理员
 			name:'admin',
 			component:admin//申明你现在的这个路径是导向哪一个文件也就是页面的含义
+		},
+		{
+			path:'/adminupdatebook/:id/:bookname',//页面的一个路径，管理员
+			name:'adminupdatebook',
+			component:adminupdatebook//申明你现在的这个路径是导向哪一个文件也就是页面的含义
 		},
 		{
 			path:'/authorAdmin',//页面的一个路径，作者管理

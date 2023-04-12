@@ -20,7 +20,7 @@ class AccountCountroller {
       let result = await db.exec(insertSql, params);
       let result2 = await db.exec(sel_sql, params);
       if (result && result.affectedRows >= 1 && result2 && result2.affectedRows == null) {
-        console.log("访问服务器成功！"),
+        // console.log("访问服务器成功！"),
           response.json({
             code: 200,
             msg: "注册成功"
@@ -69,9 +69,9 @@ class AccountCountroller {
     }
     try {
       let result = await db.exec(loginSql, params);
-      console.log('img', result[0].img)
+      // console.log('img', result[0].img)
       if (result[0].img == null) {
-        console.log('无头像')
+        // console.log('无头像')
       }
       if (result && result.length >= 1) {
 

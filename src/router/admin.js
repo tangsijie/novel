@@ -9,7 +9,7 @@ router.post("/getauthorwork", admin.getauthorwork);
 router.post("/deleteauthor", admin.deleteauthor);
 router.post("/deletebook", admin.deletebook);
 router.post("/deleteadmin", admin.deleteadmin);
-
+router.post("/updatebook", admin.updatebook);
 router.post("/getadmin", admin.getadmin);
 router.post("/addadmin", admin.addadmin);
 

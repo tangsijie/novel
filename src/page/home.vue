@@ -327,6 +327,7 @@ export default {
     },
     //搜索功能
     searchclick() {
+      
       axios({
         method: "post",
         url: "http://127.0.0.1:3000/getSql/searchSql",

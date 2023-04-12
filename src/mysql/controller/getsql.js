@@ -519,7 +519,7 @@ class AccountCountroller {
 			let s=timeFormat(time.getSeconds())
 			return `${year}-${Month}-${Day} ${h}:${m}:${s}`
 		}
-			console.log("this.getTime():",getTime());
+			// console.log("this.getTime():",getTime());
 		  let comimg2 = "SELECT bookimg  FROM book where bookname=? and status='1'; ";
 		  let params2 = [request.body.bookname];
 		  let result2 = await db.exec(comimg2, params2);
@@ -571,7 +571,7 @@ class AccountCountroller {
 				let result = await db.exec(delshujiaSql, p[i]);
 			}
 	      if (result && result.length >= 1) {
-			  console.log('xx',msg)
+			//   console.log('xx',msg)
 	          response.json({
 	            code: 200,
 	            msg: "删除成功",
@@ -691,11 +691,11 @@ class AccountCountroller {
 	    let params = [];
 	    try {
 	      let result = await db.exec(getSql, params);
-				console.log('result:',result)
+				// console.log('result:',result)
 				// for(let j = 0 ;j<result.length;j++){
 				// 	result[j].bookimg =  fs.readFileSync(result[j].bookimg, 'base64');
 				// }
-				console.log('result2222:',result)
+				// console.log('result2222:',result)
 	      if (result && result.length >= 1) {
 	          response.json({
 	            code: 200,
@@ -968,6 +968,48 @@ class AccountCountroller {
 				);
 			}
 		}
+// 获取对应书籍内容
+async getbook(request, response, next) {
+	// console.log(123);
+	let getSql = " SELECT * FROM book where bookname=? and id=?  ";
+	// console.log(request,"123");
+	let params = [request.query.bookname,request.query.id];
+	// console.log(request.query.bookname,'1223456');
+	try {
+		let result = await db.exec(getSql, params);
+		if (result && result.length >= 1) {
+				response.json({
+					code: 200,
+					msg: "查询成功",
+					data: result,
+					token: "createToken(result)"
+				});
+		} else {
+			response.json({
+		
+				code: 200,
+				msg: "查询失败",
+				data: result
+			});
+		}
+	} catch (error) {
+		//TODO handle the exception
+		response.json({
+			code: 200,
+			msg: "服务器异常",
+			error
+		});
+	}
+	function createToken(data) {
+		return jwt.encode(
+			{
+				exp: Date.now() + 1000 * 60 * 60 * 24,
+				info: data
+			},
+			require("../config").tokenKey
+		);
+	}
+}
 
 	 async fufenleiSql(request, response, next) {
 	     let getSql = " SELECT distinct fufenlei FROM book where status='1'; ";

@@ -22,7 +22,7 @@ router.post("/unizifenleiSql", getsql.unizifenleiSql);
 router.post("/searchSql", getsql.searchSql);
 router.post("/addcommentSql", getsql.addcommentSql);
 router.post("/commentshowSql", getsql.commentshowSql);
-// router.post("/delcommentshowSql", getsql.delcommentshowSql);
+router.post("/getbook", getsql.getbook);
 router.post("/getoneSql", getsql.getoneSql);
 router.post("/searchsjSql", getsql.searchsjSql);
 router.post("/mycommentSql", getsql.mycommentSql);

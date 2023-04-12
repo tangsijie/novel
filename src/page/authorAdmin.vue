@@ -68,6 +68,9 @@
             <el-button type="text" @click="deletebook(scope.row)" size="small"
               >删除</el-button
             >
+            <el-button type="text" @click="updatebook(scope.row)" size="small"
+              >修改</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -150,6 +153,7 @@ export default {
     checkwork(e) {
       this.dialogVisible = true;
       console.log(e.wname);
+      console.log('id'+e.writerid);
       axios({
         method: "post",
         url: "http://127.0.0.1:3000/admin/getauthorwork",
@@ -185,6 +189,15 @@ export default {
       }).then(res => {
         alert("删除成功");
         this.dialogVisible = false;
+      });
+    },
+    updatebook(row){
+      this.$router.push({
+        name: "adminupdatebook",
+        params:{
+          id:row.id,
+          bookname:row.bookname
+        }
       });
     }
   },
