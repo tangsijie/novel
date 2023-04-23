@@ -270,6 +270,7 @@
 					
 			      }).then(
 			        res => {
+				console.log('111'+res);
 					this.tuijianshowmesg = res.data.data;
 					this.tjs = this.tuijianshowmesg[0].tuijianshu;
 			        },
@@ -312,6 +313,7 @@
 			      }).then(
 			        res => {
 					this.isaddtuijianmesg = res.data.data;
+					console.log('222'+res);
 					this.isaddtuijiancheck();
 					
 			        },
@@ -435,28 +437,30 @@
 						// let shu=this.getBook.tuijianshu;
 						// console.log('shu',shu+1);
 						if(this.isaddtuijianmesg.length == 0 ){
+							console.log("user"+this.LoginUser.rname);
 							axios({
 							        method: "post",
 							        url: "http://127.0.0.1:3000/getSql/addtuijianSql",
 							        data: {
 							          username:this.LoginUser.rname,
 									  bookname:this.getBook.bookname,
-									  tuijianshu:1,
+									  tuijianshu:1
 									
 							        },
 							      }).then(
 							        res => {
+								     console.log('11'+res);
 										if (res.data.msg == "推荐成功") {
 											this.getttuitimer();
 											this.delttuitimer();
 											this.isaddtui=false;
 							               this.tuijianshow();
 							            } 
-							        },
+							        },);
 							        err => {
 							          console.log(err.msg);
 							        }
-							      );
+							      
 						}
 						else if(this.isaddtuijianmesg[0].tuijianshu == 0){
 							let shu = this.tuijianshowmesg[0].tuijianshu;

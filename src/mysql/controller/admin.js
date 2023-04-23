@@ -271,12 +271,14 @@ async getreader(request, response, next) {
       );
     }
   }
-  // 添加管理员
-  async addadmin(request, response, next) {
-    let insertSQL = "  INSERT INTO admin(adminid,aname,apwd) value (?,?,?);  ";
-    let params = [request.body.adminid,request.body.aname,request.body.apwd];
+  // 添加用户
+  async adduser(request, response, next) {
+    console.log(12345);
+    let insertSQL = "  INSERT INTO reader(rname,email,rpwd,phone,sex,jianjie) value (?,?,?,?,?,?);  ";
+    let params = [request.body.rname,request.body.rpwd,request.body.email,request.body.phone,request.body.sex,request.body.jianjie];
     try {
       let result = await db.exec(insertSQL, params);
+      console.log(request);
       if (result && result.length >= 1) {
         // console.log("访问服务器成功！"),
           response.json({
@@ -286,7 +288,7 @@ async getreader(request, response, next) {
       } else {
         response.json({
           code: 200,
-          msg: "添加失败",
+          msg: "添加yonghu失败",
           data: result
         });
       }

@@ -29,6 +29,10 @@ module.exports = {
       }
     }
   },
+  devServer:{
+    inline: false,
+    port:8080
+  },
   configureWebpack:{
     name:name,
     resolve:{

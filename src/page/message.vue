@@ -20,24 +20,24 @@
       <p>{{ LoginUser.rname }}</p>
       <span @click="signout" style="cursor: pointer;">退出</span>
     </div>
-   <div class="xinxi">
-     <div class="message" v-for="(v,k,i) in msgObj" :key="i">
-      <div class="messageHeader">
-        <p>{{ k }}</p>
-        <div v-for="(item,index) in v" :key="index">
-          
+    <div class="xinxi">
+      <div class="message" v-for="(v, k, i) in msgObj" :key="i">
+        <div class="messageHeader">
+          <p>{{ k }}</p>
+          <div v-for="(item, index) in v" :key="index">
+
             <ul>
               <li class="liuyanLi">
-                <span class="time">{{item.time | dateFmt("YYYY-MM-DD HH:mm:ss")}}</span>
-                {{item.value.replaceAll('"','')}}
-                <span class="del" @click="delmesg(item.id)"> 删除</span>
-                </li>
+                <span class="time">{{ item.time | dateFmt("YYYY-MM-DD HH:mm:ss") }}</span>
+                {{ item.value.replaceAll('"', '') }}
+                <button class="del" @click="delmesg(item.id)"> 删除</button>
+              </li>
             </ul>
+          </div>
         </div>
-       </div>
-     
+
+      </div>
     </div>
-   </div>
   </div>
 </template>
 
@@ -50,35 +50,36 @@ export default {
     return {
       LoginUser: {},
       comshowmeag: [],
-      msgObj:{}
+      msgObj: {},
+      imgurl:''
     };
   },
-  watch:{
-    comshowmeag:{
-      handler(newV,oldV){
-        if(newV.length>0){
-          let obj={}
+  watch: {
+    comshowmeag: {
+      handler(newV, oldV) {
+        if (newV.length > 0) {
+          let obj = {}
           // obj.length=0
-          if(this.comshowmeag.length>0){
-            this.comshowmeag.forEach((item)=>{
-              if(!obj[item.bookname]) {
-                obj[item.bookname]=[]
+          if (this.comshowmeag.length > 0) {
+            this.comshowmeag.forEach((item) => {
+              if (!obj[item.bookname]) {
+                obj[item.bookname] = []
                 // obj.length+=1
               }
-              obj[item.bookname].push({id:item.id,bookname:item.bookname,value:item.value,time:item.time})
+              obj[item.bookname].push({ id: item.id, bookname: item.bookname, value: item.value, time: item.time })
             })
-            console.log("obj::",obj);
-            this.msgObj=obj
-          }else{
-            this.msgObj= {}
+            console.log("obj::", obj);
+            this.msgObj = obj
+          } else {
+            this.msgObj = {}
           }
         }
-      },
-      deep:true,
-      immediate:true
+      }, 
+      deep: true,
+      immediate: true
     }
   },
-  
+
   methods: {
     // 获取评论
     commentshow() {
@@ -103,12 +104,12 @@ export default {
       );
     },
     // 删除评论
-     delmesg(e) {
+    delmesg(e) {
       axios({
         method: "post",
         url: "http://127.0.0.1:3000/getSql/delmycommentSql",
         data: {
-          id:[e]
+          id: [e]
         }
       }).then(
         res => {
@@ -155,8 +156,9 @@ html {
   font-family: Helvetica, "PingFang SC", "Source Han Sans CN",
     "WenQuanYi Micro Hei", "Microsoft YaHei", sans-serif;
   overflow-y: scroll;
-  background: #f7f6f2;
+  background: #58cd83;
 }
+
 .self-header {
   width: 100%;
   height: 70px;
@@ -167,7 +169,8 @@ html {
   justify-content: center;
   align-items: center;
 }
-.self-header > ul > li {
+
+.self-header>ul>li {
   float: left;
   line-height: 20px;
   display: block;
@@ -176,70 +179,91 @@ html {
   border-top: 3px solid transparent;
   border-bottom: 3px solid transparent;
 }
-.self-header > div {
+
+.self-header>div {
   position: absolute;
   left: 15%;
 }
-.self-header > div > img {
+
+.self-header>div>img {
   width: 60px;
   height: 50px;
   float: left;
 }
-.self-header > div > p {
+
+.self-header>div>p {
   color: #fff;
   font-size: 28px;
   float: left;
   margin-top: 5px;
   margin-left: 5px;
 }
-.self-header > b {
+
+.self-header>b {
   position: absolute;
   right: 28%;
 }
-.self-header > p {
+
+.self-header>p {
   position: absolute;
   right: 19%;
 }
-.self-header > ul > li:hover {
+
+.self-header>ul>li:hover {
   background-color: #000000;
 }
-.self-header > span {
+
+.self-header>span {
   position: absolute;
   right: 10%;
 }
-.xinxi{
-   width: 700px;
-   margin: 0 auto;
+
+.xinxi {
+  width: 700px;
+  margin: 0 auto;
 }
+
 .message {
- 
+
   /* height: 100px; */
   /* border: 1px solid black; */
   margin-top: 50px;
 }
+
 .messageHeader {
   position: relative;
   text-align: center;
   /* height: 50px; */
   line-height: 50px;
   margin-top: 10px;
-  background-color: rgb(218, 136, 37);
+  border-radius: 25px;
+  /* background-color: rgb(218, 136, 37); */
+  background: linear-gradient(to right, #1a9f5f, rgb(0, 255, 255));
 }
+
 .time {
   position: absolute;
   display: inline-block;
   left: 0;
   font-size: 12px;
 }
-.liuyanLi{
+
+.liuyanLi {
   position: relative;
   /* height: 150px;
-  line-height: 150px; */
-  background-color: antiquewhite;
+  line-height: 150px;  */
+  border-radius: 25px;
+  background: linear-gradient(to left, yellow, pink);
 }
-.del{
+
+.del {
   display: inline-block;
   position: absolute;
   right: 10px;
-}
-</style>
+  text-align: center;
+  line-height: 30px;
+  width: 50px;
+  margin-top: 10px;
+  background-color: #1a9f5f;
+  color: red;
+}</style>

@@ -11,7 +11,7 @@ router.post("/deletebook", admin.deletebook);
 router.post("/deleteadmin", admin.deleteadmin);
 router.post("/updatebook", admin.updatebook);
 router.post("/getadmin", admin.getadmin);
-router.post("/addadmin", admin.addadmin);
+router.post("/adduser", admin.adduser);
 
 router.post("/updateshSql", admin.updateshSql);
 router.post("/getshbook", admin.getshbook);
