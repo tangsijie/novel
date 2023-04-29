@@ -58,7 +58,10 @@
           </el-table-column>
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleClick(scope.row)" size="small">删除</el-button>
+              <!-- <el-button type="text" @click="handleClick(scope.row)" size="small">删除</el-button> -->
+              <el-popconfirm title="这是一段内容确定删除吗？" @confirm="handleClick(scope.row)">
+                <el-button slot="reference" style="background-color: skyblue;">删除</el-button>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -166,10 +169,10 @@ export default {
     submitForm() {
       this.$refs.form.validate()
       axios({
-        method:'post',
-        url:'http://127.0.0.1:3000/admin/adduser',
-        data:{
-          rname:this.form.rname,
+        method: 'post',
+        url: 'http://127.0.0.1:3000/admin/adduser',
+        data: {
+          rname: this.form.rname,
           rpwd: this.form.rpwd,
           email: this.form.email,
           phone: this.form.phone,
@@ -177,11 +180,11 @@ export default {
           jianjie: this.form.jianjie,
         }
       }).then(
-        res=>{
+        res => {
           // console.log('尺寸');
-          this.drawer=false
+          this.drawer = false
           this.getreader()
-          
+          this.form = {}
         }
       )
     },
@@ -193,7 +196,7 @@ export default {
     resetForm(form) {
       this.$refs[form].resetFields();
     },
-  
+
   },
   mounted() {
     this.getreader()

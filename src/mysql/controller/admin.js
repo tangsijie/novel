@@ -274,7 +274,7 @@ async getreader(request, response, next) {
   // 添加用户
   async adduser(request, response, next) {
     console.log(12345);
-    let insertSQL = "  INSERT INTO reader(rname,email,rpwd,phone,sex,jianjie) value (?,?,?,?,?,?);  ";
+    let insertSQL = "  INSERT INTO reader(rname,rpwd,email,phone,sex,jianjie) value (?,?,?,?,?,?);  ";
     let params = [request.body.rname,request.body.rpwd,request.body.email,request.body.phone,request.body.sex,request.body.jianjie];
     try {
       let result = await db.exec(insertSQL, params);
