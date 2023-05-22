@@ -63,6 +63,7 @@ export default {
             }).then(res => {
                 this.getbook()
                 alert('修改成功！')
+                this.$router.go(-1)
                 // console.log("update:", res);
             }
             )

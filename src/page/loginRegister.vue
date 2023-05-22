@@ -168,7 +168,7 @@ export default {
           }
         }).then(
           res => {
-                        console.log(res.data.msg);
+            //  console.log(res.data.msg);
             if (res.data.msg == "注册成功") {
               alert(this.lisaccount + "账号注册成功，返回登录！");
               // this.login();

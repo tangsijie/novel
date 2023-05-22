@@ -88,7 +88,7 @@ export default {
 	methods: {
 		getfufenleidata() {
 			this.fufenlei = this.$route.params.fufenlei
-			console.log('3333'+this.fufenlei);
+			// console.log('3333'+this.fufenlei);
 			// this.unizifenleiSql();
 		},
 		godetail(b) {
@@ -125,7 +125,7 @@ export default {
                 }
             }).then(
                 res => {
-                    console.log("fenlei---", res.data.data);
+                    // console.log("fenlei---", res.data.data);
                     this.fenlei = res.data.data;
                 },
                 err => {

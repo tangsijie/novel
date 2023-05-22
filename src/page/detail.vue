@@ -240,7 +240,7 @@ export default {
             this.comshow2 = false;
             this.desc = "";
           } else if (res.data.msg == "加入评论失败") {
-            // alert("信息修改失败");
+            alert("信息修改失败");
           }
         },
         err => {

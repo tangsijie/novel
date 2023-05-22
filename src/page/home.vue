@@ -39,11 +39,13 @@
           >
             登录
           </div>
-          <router-link
-            to="/loginRegister"
+          <div
+            @click="register"
+            v-if="islogin"
             style="margin-left: 40px;cursor: pointer;"
-            >注册</router-link
           >
+            注册
+          </div>
           <div style="margin-left: 20px;" v-if="!islogin">
             你好，{{ LoginUser.rname }}
           </div>
@@ -188,7 +190,7 @@
           <div class="conts-secd2">
             <p>巫术世界</p>
             <p>上帝佛但是覅但是覅的身份后第四</p>
-            <p @click="getonebook('巫界术士')">书籍详情</p>
+            <p @click="getonebook('巫界术士')" style="cursor: pointer;">书籍详情</p>
           </div>
         </div>
         <ul>
@@ -279,6 +281,7 @@ export default {
       searchvalue: "",
       fufenlei: "",
       fenlei: "",
+      tuijian:'',
       mesg: "",
       LoginUser: "",
       img_list2: [
@@ -301,7 +304,7 @@ export default {
       this.$store.commit('setbook',e)
     },
     gofufenlei(f) {
-      console.log("f", f.fufenlei);
+      // console.log("f", f.fufenlei);
       //获取子分类
       axios({
         method: "post",
@@ -326,8 +329,7 @@ export default {
       );
     },
     //搜索功能
-    searchclick() {
-      
+    searchclick() {  
       axios({
         method: "post",
         url: "http://127.0.0.1:3000/getSql/searchSql",
@@ -344,7 +346,15 @@ export default {
         }
       );
     },
+    
     gologin() {
+      //你给事件所定义的事件名
+      this.$router.push({
+        //this就是调用这个文件里面的方法和数据,$router的意思就是调用路由，使得路由进行跳转
+        path: "/loginRegister"
+      });
+    },
+    register() {
       //你给事件所定义的事件名
       this.$router.push({
         //this就是调用这个文件里面的方法和数据,$router的意思就是调用路由，使得路由进行跳转
@@ -391,7 +401,7 @@ export default {
         }
       }).then(
         res => {
-          console.log("fenlei",res.data.data);
+          // console.log("fenlei",res.data.data);
           this.fenlei = res.data.data;
         },
         err => {
@@ -406,7 +416,7 @@ export default {
 
       }).then(
         res => {
-          console.log(" res.data.data:", res);
+          // console.log(" res.data.data:", res);
           this.mesg = res.data.data;
           this.mesg.sort((a, b) => {
             return -(a.tuijianshu - b.tuijianshu);

@@ -197,12 +197,12 @@ export default {
   methods: {
     //上传图片
     getsuccess(res) {
-      console.log(res, 0);
+      // console.log(res, 0);
       // this.geturl= 'data:image/png;base64,'+res.data
       if(res){
         this.avatarImg = res.data.path;
       }
-      console.log("img----", this.avatarImg);
+      // console.log("img----", this.avatarImg);
       //解析图片
     },
     gaimimashow() {
@@ -249,7 +249,7 @@ export default {
         }
       }).then(
         res => {
-          console.log("resssss:",res)
+          // console.log("resssss:",res)
           if (res.data.msg == "更新成功") {
             alert("信息修改成功");
             this.$router.push({
@@ -272,11 +272,11 @@ export default {
       // params:{date:1}
     },
     getuser() {
-      console.log('STORE:',this.$store.state.user);
+      // console.log('STORE:',this.$store.state.user);
       // this.LoginUser = this.$store.state.user;
       this.LoginUser = JSON.parse(window.localStorage.getItem("userInfo"))
       this.imgurl =this.$store.state.user.img;
-      console.log('imgurl::::',this.imgurl);
+      // console.log('imgurl::::',this.imgurl);
     },
     signout() {
       this.$store.commit("setData", ""); //更新userInfo
@@ -294,7 +294,7 @@ export default {
       this.mima.checkPass = "";
     },
     handleRemove(file) {
-      console.log(file);
+      // console.log(file);
       file.url = "";
       this.disabled = false;
     },

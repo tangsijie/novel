@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     gobook(e) {
-			console.log(e);
+			// console.log(e);
       this.$router.push({
         name: "book",
         params: {
@@ -44,7 +44,7 @@ export default {
           bookname: name
         }
       }).then(res => {
-        console.log('bookname',res);
+        // console.log('bookname',res);
         this.gobook(res.data.data[0]);
       });
     }

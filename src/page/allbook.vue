@@ -40,7 +40,7 @@ export default {
 
             }).then(
                 res => {
-                    console.log(" res.data.data:", res);
+                    // console.log(" res.data.data:", res);
                     this.mesg = res.data.data;
                     this.mesg.sort((a, b) => {
                         return -(a.tuijianshu - b.tuijianshu);
@@ -64,7 +64,7 @@ export default {
                 }
             }).then(
                 res => {
-                    console.log("fenlei++++", res.data.data);
+                    // console.log("fenlei++++", res.data.data);
                     this.fenlei = res.data.data;
                 },
                 err => {

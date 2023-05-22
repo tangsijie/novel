@@ -13,11 +13,7 @@
           </el-table-column>
           <el-table-column prop="bookname" label="小说名" width="180">
           </el-table-column>
-          <el-table-column
-            prop="jieshao"
-            label="小说简介"
-            show-overflow-tooltip
-          >
+          <el-table-column prop="jieshao" label="小说简介" show-overflow-tooltip>
           </el-table-column>
           <el-table-column prop="starttime" label="创建时间" width="180">
             <!-- <template slot-scope="scope">{{starttime|dateFmt('YYYY-MM-DD HH:mm:ss')}}</template> -->
@@ -26,12 +22,8 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-button type="text" @click="updatesh(scope.row)" size="small"
-                >审核通过</el-button
-              >
-              <el-button type="text" @click="delbook(scope.row)" size="small"
-                >不通过</el-button
-              >
+              <el-button type="text" @click="updatesh(scope.row)" size="small">审核通过</el-button>
+              <el-button type="text" @click="delbook(scope.row)" size="small">不通过</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -64,7 +56,7 @@ export default {
         .then(_ => {
           done();
         })
-        .catch(_ => {});
+        .catch(_ => { });
     },
     goadmin() {
       this.$router.push({
@@ -97,9 +89,6 @@ export default {
         this.getsh();
       });
     },
-    addadmin() {
-      this.dialogVisible = true;
-    },
     updatesh(e) {
       axios({
         method: "post",
@@ -111,8 +100,12 @@ export default {
         alert("审核通过");
         this.getsh();
       });
-    }
+    },
+    addadmin() {
+      this.dialogVisible = true;
+    },
   },
+
   mounted() {
     this.getsh();
   }
@@ -125,19 +118,22 @@ export default {
   margin: 0;
   list-style: none;
 }
+
 html,
 body {
   height: 100%;
   width: 100%;
 }
-.el-aside > div {
+
+.el-aside>div {
   height: 100px;
   line-height: 100px;
   text-align: center;
   font-size: 20px;
   font-weight: bold;
 }
-.el-aside > div:hover {
+
+.el-aside>div:hover {
   color: brown;
 }
 </style>

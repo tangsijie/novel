@@ -30,15 +30,16 @@
         <el-input
           ref="Htmlvalue"
           type="textarea"
-          :rows="19"
+          :rows="32"
           placeholder="请输入内容"
           v-model="value"
+          
         >
         </el-input>
         <!-- <div id="context" ref="Htmlvaluea"></div> -->
       </div>
       <footer>
-        <div @click="update">确认修改</div>
+        <div @click="update" style="cursor: pointer;">确认修改</div>
       </footer>
     </div>
   </div>
@@ -76,8 +77,8 @@ export default {
         this.zhangjieInfo = res.data.data[0];
         this.value = this.zhangjieInfo.value.replace(/<[^<>]+>/g, "");
         this.value=this.value.replace(/&nbsp;/g,'')
-        console.log(this.value);
-        console.log("章节信息：", res);
+        // console.log(this.value);
+        // console.log("章节信息：", res);
       });
     },
     update() {
@@ -110,7 +111,7 @@ export default {
 <style scoped>
 .text {
   position: relative;
-  width: 700px;
+  width: 800px;
   background: linear-gradient(rgb(106, 106, 196), pink);
   margin: 0 auto;
   color: #fff;
@@ -120,7 +121,7 @@ header {
   line-height: 50px;
   position: fixed;
   top: 0;
-  width: 700px;
+  width: 800px;
   height: 50px;
   background: linear-gradient(to right, rgb(0, 255, 187), rgb(255, 192, 232));
 }
@@ -133,7 +134,7 @@ footer {
   text-align: center;
   position: absolute;
   bottom: 0;
-  width: 700px;
+  width: 800px;
   height: 50px;
   line-height: 50px;
   background: linear-gradient(to right, rgb(255, 192, 232), rgb(0, 255, 187));

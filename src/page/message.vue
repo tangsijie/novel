@@ -68,7 +68,7 @@ export default {
               }
               obj[item.bookname].push({ id: item.id, bookname: item.bookname, value: item.value, time: item.time })
             })
-            console.log("obj::", obj);
+            // console.log("obj::", obj);
             this.msgObj = obj
           } else {
             this.msgObj = {}
@@ -93,7 +93,7 @@ export default {
         res => {
           console.log("评论：", res);
           this.comshowmeag = res.data.data;
-          console.log("this.comshowmeag", this.comshowmeag);
+          // console.log("this.comshowmeag", this.comshowmeag);
           this.comshowmeag.sort((a, b) => {
             return new Date(b.time) - new Date(a.time);
           });

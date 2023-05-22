@@ -27,4 +27,5 @@ router.post("/getoneSql", getsql.getoneSql);
 router.post("/searchsjSql", getsql.searchsjSql);
 router.post("/mycommentSql", getsql.mycommentSql);
 router.post("/delmycommentSql", getsql.delmycommentSql);
+router.post('/fangwenliang',getsql.updatebook)
 module.exports = router;

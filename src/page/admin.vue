@@ -8,7 +8,7 @@
         <div @click="tuichu" style="cursor: pointer;">退出系统</div>
       </el-aside>
       <el-main>
-        <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
+        <el-button @click="drawer = true" type="primary" style="margin: 16px;">
           添加用户
         </el-button>
         <el-drawer title="新增用户" :visible.sync="drawer" :direction="direction">
@@ -147,7 +147,7 @@ export default {
     },
     //删除对应读者
     handleClick(e) {
-      console.log(1)
+      // console.log(1)
       axios({
         method: "post",
         url: "http://127.0.0.1:3000/admin/deletereader",
